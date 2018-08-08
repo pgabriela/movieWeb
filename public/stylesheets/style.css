@@ -1,8 +1,72 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: black;
 }
 
-a {
-  color: #00B7FF;
+#title {
+  font-size: 38px;
+  color: #d0a107;
+  font-family: "Courier New";
+  font-weight: bold;
+  margin-left: 15px
+}
+
+.navbar {
+  position: fixed;
+  z-index: 10;
+  background-color: rgba(0,0,0,0.3);
+  display: flex;
+  width: 100%;
+}
+
+#logo {
+  margin-left: 35px;
+  margin-top: -5px;
+}
+
+#leftnav {
+  flex-grow: 20;
+}
+
+.input-group {
+  margin: 15px;
+}
+
+#login {
+  width: 20%;
+  padding: 4px;
+  font-size: 20px;
+}
+
+.form-control, .form-control:focus {
+  border-color: #d0a107;
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: none;
+  color: #d0a107;
+  font-size: 20px;
+}
+
+.form-control::placeholder {
+  color: #d0a107;
+}
+
+#searchBar {
+  background-color: rgba(0,0,0,0);
+}
+
+#smallMovies {
+  margin: 30px;
+  margin-left: 200px !important;
+}
+
+#smallMovies > h4 {
+  color: #d0a107;
+}
+
+.card {
+  background-color: black;
+  border-color: rgba(255,255,255,0.1);
+  border-width: 2px;
+  border-style: solid;
 }

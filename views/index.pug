@@ -1,5 +1,61 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+
+  nav(class="navbar navbar-expand-lg")
+    img#logo(src="/images/icon.png", style="width: 50px; height: 50px")
+    a.navbar-brand#leftnav(href="#")
+      #title LUMINA
+  
+    .collapse(class="navbar-collapse", id="navbarSupportedContent")
+      form(class="form-inline my-2 my-lg-0")
+        .input-group
+          input.form-control(placeholder="Search", id="searchBar")
+          .input-group-append
+            button.btn(class="btn-outline-warning", href="#")
+              i.fa(class="fa-search")
+      button#login(class="btn btn-outline-warning") Login
+
+  #carouselExampleIndicators(class="carousel slide", data-ride="carousel")
+    ol.carousel-indicators
+      li.active(data-target="#carouselExampleIndicators", data-slide-to="0")
+      li(data-target="#carouselExampleIndicators", data-slide-to="1")
+      li(data-target="#carouselExampleIndicators", data-slide-to="2")
+    .carousel-inner
+      .carousel-item(class="active")
+        img(class="d-block w-100", src="/images/sicario.jpeg", alt="First slide")
+        .carousel-caption(class="d-none d-md-block")
+          h2 Sicario
+          h3 Day of the Soldado
+      .carousel-item
+        img(class="d-block w-100", src="/images/mi.jpeg", alt="Second slide")
+        .carousel-caption(class="d-none d-md-block")
+          h2 Mission Impossible
+          h3 Fallout
+      .carousel-item
+        img(class="d-block w-100", src="/images/escapeplan2.jpg", alt="Third slide")
+        .carousel-caption(class="d-none d-md-block")
+          h2 Escape Plan 2
+          h3 Hades
+    a.carousel-control-prev(href="#carouselExampleIndicators", role="button", data-slide="prev")
+      span.carousel-control-prev-icon(aria-hidden="true")
+      span.sr-only Previous
+    a.carousel-control-next(href="#carouselExampleIndicators", role="button", data-slide="next")
+      span.carousel-control-next-icon(aria-hidden="true")
+      span.sr-only Next
+
+  br
+  br
+
+  #smallMovies
+    each category in ["Most Reviewed", "Top Rated", "Most Watched"]
+      h4= category
+      .card-deck(style="margin-bottom: 50px")
+        - for (var i=0; i<6; i++)
+          .card(class="text-white")
+            img.card-img-top(src="/images/inception.jpg", alt="mock")
+            .card-body
+              h5.card-title The Inception
+              p.card-text Lorem ipsum dolor amet siji bataka simalem boro dirus baya cabe
+              p.card-text
+                small.text-muted Published 2 months ago
