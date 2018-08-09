@@ -6,15 +6,14 @@ block content
     img#logo(src="/images/icon.png", style="width: 50px; height: 50px")
     a.navbar-brand#leftnav(href="#")
       #title LUMINA
-  
-    .collapse(class="navbar-collapse", id="navbarSupportedContent")
-      form(class="form-inline my-2 my-lg-0")
-        .input-group
-          input.form-control(placeholder="Search", id="searchBar")
-          .input-group-append
-            button.btn(class="btn-outline-warning", href="#")
-              i.fa(class="fa-search")
-      button#login(class="btn btn-outline-warning") Login
+
+    form(class="form-inline my-2 my-lg-0")
+      .input-group
+        input.form-control(placeholder="Search", id="searchBar")
+        .input-group-append
+          button.btn(class="btn-outline-warning", href="#")
+            i.fa(class="fa-search")
+    button#login(class="btn btn-outline-warning") Login
 
   #carouselExampleIndicators(class="carousel slide", data-ride="carousel")
     ol.carousel-indicators
@@ -47,15 +46,18 @@ block content
   br
   br
 
-  #smallMovies
-    each category in ["Most Reviewed", "Top Rated", "Most Watched"]
-      h4= category
-      .card-deck(style="margin-bottom: 50px")
-        - for (var i=0; i<6; i++)
-          .card(class="text-white")
-            img.card-img-top(src="/images/inception.jpg", alt="mock")
-            .card-body
-              h5.card-title The Inception
-              p.card-text Lorem ipsum dolor amet siji bataka simalem boro dirus baya cabe
-              p.card-text
-                small.text-muted Published 2 months ago
+  .container-fluid
+    #smallMovies
+      each category in ["Most Reviewed", "Top Rated", "Most Watched"]
+        h4= category
+        .card-deck(style="margin-bottom: 50px")
+          .row
+            - for (var i=0; i<6; i++)
+              .col-md-6(class="col-xl-2 col-lg-2 col-sm-12", style="margin-bottom: 15px")
+                .card(class="text-white", id="card" + i)
+                  img.card-img-top(src="/images/inception.jpg", alt="mock")
+                  .card-body
+                    h5.card-title The Inception
+                    p.card-text Lorem ipsum dolor amet siji bataka simalem boro dirus baya cabe
+                    p.card-text
+                      small.text-muted Published 2 months ago
