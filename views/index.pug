@@ -16,7 +16,16 @@ block content
           .input-group-append
             button.btn(class="btn-outline-warning", href="#")
               i.fa(class="fa-search")
-      button#login(class="btn btn-outline-warning float-right") Login
+      if loggedIn == 'false'
+        button#login(class="btn btn-outline-warning float-right", onclick="loginBtn()") Login
+      else
+        .dropdown(class="float-right")
+          a.dropdown-toggle#loggedName(href="#", data-toggle="dropdown", style="color: #ffc107; font-weight: bold; font-size: 20px") Hi, #{fullname}
+          .dropdown-menu#loggedMenu(aria-labelledby="dropdownMenuLink", class="dropdown-menu-right", style="margin: -2px; background-color: rgba(0,0,0,0.3)")
+            a.dropdown-item#profileBtn(href="#", style="color: #ffc107; font-weight: bold") Profile
+            a.dropdown-item#BuyTokenBtn(href="#", style="color: #ffc107; font-weight: bold") Buy Token
+            .dropdown-divider
+            a.dropdown-item#logout(href="#", style="color: #ffc107; font-weight: bold") Logout
 
   #carouselExampleIndicators(class="carousel slide", data-ride="carousel")
     ol.carousel-indicators
@@ -87,3 +96,8 @@ block content
         .modal-footer
           button.btn(type="button", class="btn-secondary", data-dismiss="modal") No
           button.btn(type="button", class="btn-primary") Yes
+
+  script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js", integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49", crossorigin="anonymous")
+  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js", integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy", crossorigin="anonymous")
+  script(src='javascripts/effect.js')
