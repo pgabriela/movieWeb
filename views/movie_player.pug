@@ -1,0 +1,53 @@
+extend layout
+
+block content
+  video#theMovie(controls) Your browser does not support the video tag.
+    source(src="movie/1.mp4", type="video/mp4")
+
+  script.
+    window.onload = function(){
+      var vw = $(window).width();
+      var vh = $(window).height();
+      var mov = document.getElementById("theMovie");
+      var mw = mov.videoWidth;
+      var mh = mov.videoHeight;
+      var xratio = vw / mw;
+      var yratio = vh / mh;
+      if(yratio < xratio){
+        $("#theMovie").css("width", "auto");
+        $("#theMovie").css("height", vh);
+        var mw2 = $("#theMovie").width();
+        $("#theMovie").css("margin-left", (vw - mw2)/2);
+        $("html").css("overflow", "hidden");
+      } else {
+        $("#theMovie").css("width", "100%");
+        $("#theMovie").css("height", "auto");
+        var mh2 = $("#theMovie").height();
+        $("#theMovie").css("margin-top", (vh - mh2)/2);
+        $("html").css("overflow", "hidden");
+      }
+    }
+    window.onresize = function(){
+      var vw = $(window).width();
+      var vh = $(window).height();
+      var mov = document.getElementById("theMovie");
+      var mw = mov.videoWidth;
+      var mh = mov.videoHeight;
+      var xratio = vw / mw;
+      var yratio = vh / mh;
+      if(yratio < xratio){
+        $("#theMovie").css("width", "auto");
+        $("#theMovie").css("height", vh);
+        var mw2 = $("#theMovie").width();
+        $("#theMovie").css("margin-left", (vw - mw2)/2);
+        $("html").css("overflow", "hidden");
+      } else {
+        $("#theMovie").css("width", "100%");
+        $("#theMovie").css("height", "auto");
+        var mh2 = $("#theMovie").height();
+        $("#theMovie").css("margin-top", (vh - mh2)/2);
+        $("html").css("overflow", "hidden");
+      }
+    }
+
+  script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")

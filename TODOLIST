@@ -1,0 +1,10 @@
+- Put the movies in DB instead of 'public' folder
+- Stream the movie from DB to client
+- Integrate with Metamask
+- Finish the Smart Contract
+- Make the Token Store Page
+- Make the Movie Payment Page
+- Make the Profile Page
+- Make the Review Page (Write and Read)
+- Admin page???
+- Add the fields in Registration

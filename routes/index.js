@@ -69,4 +69,8 @@ router.get('/logout', function(req, res, next){
   }
 });
 
+router.get('/mov', function(req, res, next){
+  res.render('movie_player', { title: "Movie Player" });
+});
+
 module.exports = router;
