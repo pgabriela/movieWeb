@@ -2,18 +2,21 @@ extends layout
 
 block content
 
-  nav(class="navbar navbar-expand-lg")
+  nav(class="navbar navbar-expand-md")
     img#logo(src="/images/icon.png", style="width: 50px; height: 50px")
     a.navbar-brand#leftnav(href="#")
       #title LUMINA
+    button.navbar-toggler(class="btn btn-outline-warning", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+      span.fas(class="fa-bars")
 
-    form(class="form-inline my-2 my-lg-0")
-      .input-group
-        input.form-control(placeholder="Search", id="searchBar")
-        .input-group-append
-          button.btn(class="btn-outline-warning", href="#")
-            i.fa(class="fa-search")
-    button#login(class="btn btn-outline-warning") Login
+    .collapse(class="navbar-collapse", id="navbarSupportedContent")
+      form(class="form-inline my-2 my-lg-0 d-flex justify-content-end")
+        .input-group
+          input.form-control(placeholder="Search", id="searchBar")
+          .input-group-append
+            button.btn(class="btn-outline-warning", href="#")
+              i.fa(class="fa-search")
+      button#login(class="btn btn-outline-warning float-right") Login
 
   #carouselExampleIndicators(class="carousel slide", data-ride="carousel")
     ol.carousel-indicators
@@ -22,20 +25,23 @@ block content
       li(data-target="#carouselExampleIndicators", data-slide-to="2")
     .carousel-inner
       .carousel-item(class="active")
-        img(class="d-block w-100", src="/images/sicario.jpeg", alt="First slide")
-        .carousel-caption(class="d-none d-md-block")
-          h2 Sicario
-          h3 Day of the Soldado
+        a(href="#", data-toggle="modal", data-target="#exampleModal")
+          img(class="d-block w-100", src="/images/1.png", alt="First slide")
+        .carousel-caption(class="text-left d-none d-sm-block")
+          h2 Title1
+          h3 Subtitle1
       .carousel-item
-        img(class="d-block w-100", src="/images/mi.jpeg", alt="Second slide")
-        .carousel-caption(class="d-none d-md-block")
-          h2 Mission Impossible
-          h3 Fallout
+        a(href="#", data-toggle="modal", data-target="#exampleModal")
+          img(class="d-block w-100", src="/images/2.png", alt="Second slide")
+        .carousel-caption(class="text-left d-none d-sm-block")
+          h2 Title2
+          h3 Subtitle2
       .carousel-item
-        img(class="d-block w-100", src="/images/escapeplan2.jpg", alt="Third slide")
-        .carousel-caption(class="d-none d-md-block")
-          h2 Escape Plan 2
-          h3 Hades
+        a(href="#", data-toggle="modal", data-target="#exampleModal")
+          img(class="d-block w-100", src="/images/3.png", alt="Third slide")
+        .carousel-caption(class="text-left d-none d-sm-block")
+          h2 Title3
+          h3 Subtitle3
     a.carousel-control-prev(href="#carouselExampleIndicators", role="button", data-slide="prev")
       span.carousel-control-prev-icon(aria-hidden="true")
       span.sr-only Previous
@@ -48,16 +54,36 @@ block content
 
   .container-fluid
     #smallMovies
+      - var counter = 0;
       each category in ["Most Reviewed", "Top Rated", "Most Watched"]
         h4= category
         .card-deck(style="margin-bottom: 50px")
           .row
             - for (var i=0; i<6; i++)
-              .col-md-6(class="col-xl-2 col-lg-2 col-sm-12", style="margin-bottom: 15px")
-                .card(class="text-white", id="card" + i)
-                  img.card-img-top(src="/images/inception.jpg", alt="mock")
-                  .card-body
-                    h5.card-title The Inception
+              .col-md-6(class="col-xl-2 col-lg-3 col-sm-12", style="margin-bottom: 15px")
+                .card(class="text-white", id="movieCard" + counter + i)
+                  img.card-img-top(id="movieImg" + counter + i, src="/images/4.png", alt="mock")
+                  .card-body(id="movieText" + counter + i)
+                    h5.card-title Title4
                     p.card-text Lorem ipsum dolor amet siji bataka simalem boro dirus baya cabe
                     p.card-text
                       small.text-muted Published 2 months ago
+                  .card-img-overlay(id="playIcon" + counter + i, class="invisible", style="padding: 0")
+                    a(href="#", data-toggle="modal", data-target="#exampleModal")
+                      img.card-img(src="/images/play.png", style="width: 100%; height: 100%")
+        - counter += 1;
+
+  .modal#exampleModal(class="fade", tabindex="-1", role="dialog", aria-labelledby="exampleModalLabel", aria-hidden="true")
+    .modal-dialog(role="document")
+      .modal-content
+        .modal-header
+          h5.modal-title#exampleModalLabel Watch This Movie?
+          button.close(type="button", data-dismiss="modal", aria-label="Close")
+            span(aria-hidden="true") &times;
+        .modal-body#modalBody
+          p Your current balance: __ LUMINA TOKEN
+          p This movie costs __ LUMINA TOKEN
+          p Do you want to continue?
+        .modal-footer
+          button.btn(type="button", class="btn-secondary", data-dismiss="modal") No
+          button.btn(type="button", class="btn-primary") Yes

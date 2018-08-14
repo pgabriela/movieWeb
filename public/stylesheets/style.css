@@ -19,6 +19,13 @@ body {
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .navbar {
+    position: sticky;
+    background-color: rgba(240,240,240,1);
+  }
+}
+
 #logo {
   margin-left: 35px;
   margin-top: -5px;
@@ -32,6 +39,13 @@ body {
   margin: 15px;
 }
 
+@media (max-width: 768px){
+  .input-group {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
 #login {
   width: 20%;
   padding: 4px;
@@ -39,16 +53,16 @@ body {
 }
 
 .form-control, .form-control:focus {
-  border-color: #d0a107;
+  border-color: #ffc107;
   border-width: 1px;
   border-style: solid;
   box-shadow: none;
-  color: #d0a107;
+  color: #ffc107;
   font-size: 20px;
 }
 
 .form-control::placeholder {
-  color: #d0a107;
+  color: #ffc107;
 }
 
 #searchBar {
@@ -61,7 +75,7 @@ body {
 }
 
 #smallMovies > h4 {
-  color: #d0a107;
+  color: #ffc107;
 }
 
 .card {
