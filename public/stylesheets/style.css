@@ -84,3 +84,19 @@ body {
   border-width: 2px;
   border-style: solid;
 }
+
+.dropdown-item {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.dropdown-toggle {
+  color: #ffc107;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.dropdown-menu {
+  margin: -2px;
+  background-color: rgba(0,0,0,0.3);
+}

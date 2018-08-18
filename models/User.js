@@ -19,12 +19,18 @@ var userSchema = new Schema({
     Required:  'Email address cannot be left blank.',
     validate: [validateEmail, 'Please fill a valid email address'],
          match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
-    index: {unique: true, dropDups: true}
+    //index: {unique: true, dropDups: true}
     },
 
   password: { type: String , required: [true,  'Password cannot be left blank']},
 
+  ethaddr: {
+    type: String,
+    required: [true, 'Ethereum Address must be provided'] },
+    //index: {unique: true, dropDups: true}
 });
+userSchema.index({ ethaddr: 1 });
+userSchema.index({ email: 1 });
 
 //authenticate input against database
 userSchema.statics.authenticate = function (fullname, password, callback) {

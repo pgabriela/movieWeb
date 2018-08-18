@@ -41,3 +41,35 @@ $('.tab a,.links a').on('click', function (e) {
   $(target).fadeIn(600);
   
 });
+
+$("#registerForm").on('submit', function(e){
+  var addrVal = $("#ethAddr").val();
+  if(addrVal == ""){
+    e.preventDefault();
+    alert("Registration process failed because you have not logged in to the Metamask. Please login to Metamask and refresh this page");
+  }
+  $('#ethAddr').prop("disabled", false);
+});
+
+
+var web3js = 0;
+
+window.addEventListener('load', function() {
+
+	// Checking if Web3 has been injected by the browser (Mist/MetaMask)
+	if (typeof web3 !== 'undefined') {
+		// Use Mist/MetaMask's provider
+		web3js = new Web3(web3.currentProvider);
+	} else {
+		alert('No web3js detected. You should install Metamask');
+		window.location.href = '/';
+		// fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+	}
+
+	// Now you can start your app & access web3 freely:
+	web3js.eth.getAccounts(function(err, res){
+		if(typeof res[0] != 'undefined'){
+			document.getElementById("ethAddr").value = res[0];
+		}
+	});
+});
