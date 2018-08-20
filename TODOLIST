@@ -1,4 +1,4 @@
-- Make the Token Store Page
+- Make the Token Store Page (and add the contract address to be the second owner of the token contract)
 - Make the Review Page (Write and Read)
 - When login, check if it is producer or user
 - Admin page???
