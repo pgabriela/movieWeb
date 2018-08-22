@@ -9,7 +9,7 @@ interface token {
 }
 
 contract movieWeb {
-    
+
     // =========================================================================
     // ============================ VARIABLES ==================================
     // =========================================================================
@@ -25,27 +25,27 @@ contract movieWeb {
         string genre;
         string desc;
         string country;
-        string[] casts;
+        string casts;
         uint moviePrice;
         mapping (address => string) reviews;
         address[] reviewer;
-        
+
         bool isValue;
     }
-    
+
     mapping (address => string) users;
     mapping (address => string) producers;
     address[] userKeys;
     address[] producerKeys;
     mapping (address => mapping (string => movie)) moviesProduced;
     mapping (address => mapping (address => mapping (string => uint))) moviesWatched;
-    
+
     uint public tokenPerEther_buyPrice;
     uint public tokenPerEther_sellPrice;
     // =========================================================================
     // =========================================================================
-    
-    
+
+
 
     // =========================================================================
     // =========================== CONSTRUCTOR =================================
@@ -58,8 +58,8 @@ contract movieWeb {
     }
     // =========================================================================
     // =========================================================================
-    
-    
+
+
 
     // =========================================================================
     // ============================ EVENTS =====================================
@@ -67,8 +67,8 @@ contract movieWeb {
     event WriteReview(bool success, string desc);
     // =========================================================================
     // =========================================================================
-    
-    
+
+
 
     // =========================================================================
     // ======================== GETTER FUNCTION ================================
@@ -76,67 +76,63 @@ contract movieWeb {
     function getUserName(address user) public constant returns (string){
         return users[user];
     }
-    
+
     function getProducerName(address producer) public constant returns (string){
         return producers[producer];
     }
-    
+
     function getMovie(address producer, string name) internal constant returns (movie){
         return moviesProduced[producer][name];
     }
-    
+
     function getMovieReleaseDate(address producer, string name) public constant returns (string){
         return getMovie(producer, name).releaseDate;
     }
-    
+
     function getMovieRatingSum(address producer, string name) public constant returns (uint){
         return getMovie(producer, name).ratingSum;
     }
-    
+
     function getMovieRaterSum(address producer, string name) public constant returns (uint){
         return getMovie(producer, name).raterSum;
     }
-    
+
     function getMovieGenre(address producer, string name) public constant returns (string){
         return getMovie(producer, name).genre;
     }
-    
+
     function getMovieDesc(address producer, string name) public constant returns (string){
         return getMovie(producer, name).desc;
     }
-    
+
     function getMovieCountry(address producer, string name) public constant returns (string){
         return getMovie(producer, name).country;
     }
-    
+
     function getMoviePrice(address producer, string name) public constant returns (uint){
         return getMovie(producer, name).moviePrice;
     }
-    
-    function getMovieCastCount(address producer, string movieName) public constant returns (uint){
-        return getMovie(producer, movieName).casts.length;
-    }
-    
-    function getMovieCastAtIndex(address producer, string name, uint index) public constant returns (string){
-        return getMovie(producer, name).casts[index];
+
+    function getMovieCasts(address producer, string name) public constant returns (string){
+        return getMovie(producer, name).casts;
     }
 
     function hasPaid(address producer, address user, string movieName) public constant returns (uint){
         return moviesWatched[user][producer][movieName];
     }
-    
+
     function getMovieReviewCount(address producer, string movieName) public constant returns (uint){
         return getMovie(producer, movieName).reviewer.length;
     }
-    
+
     function getMovieReviewAtIndex(address producer, string movieName, uint index) public constant returns (string){
         address currReviewer = getMovie(producer, movieName).reviewer[index];
         return moviesProduced[producer][movieName].reviews[currReviewer];
     }
     // =========================================================================
     // =========================================================================
-    
-    
+
+
 
     // =========================================================================
     // =========================== MODIFIER ====================================
@@ -147,8 +143,8 @@ contract movieWeb {
     }
     // =========================================================================
     // =========================================================================
-    
-    
+
+
 
     // =========================================================================
     // ======================== SETTER FUNCTION ================================
@@ -157,58 +153,48 @@ contract movieWeb {
         users[user] = name;
         userKeys.push(user);
     }
-    
+
     function addProducer(address producer, string name) public onlyOwner {
         producers[producer] = name;
         producerKeys.push(producer);
     }
-    
+
     function addMovie(
+        address producer,
         string movieName,
-        string releaseDate, 
+        string releaseDate,
         string genre,
+        string casts,
         string desc,
         string country,
         uint moviePrice
     ) public {
-        // Has to be a producer
-        require(bytes(producers[msg.sender]).length != 0 || msg.sender == OWNER);
-        
-        moviesProduced[msg.sender][movieName].releaseDate = releaseDate;
-        moviesProduced[msg.sender][movieName].raterSum = 0;
-        moviesProduced[msg.sender][movieName].ratingSum = 0;
-        moviesProduced[msg.sender][movieName].genre = genre;
-        moviesProduced[msg.sender][movieName].desc = desc;
-        moviesProduced[msg.sender][movieName].country = country;
-        moviesProduced[msg.sender][movieName].moviePrice = moviePrice;
-        moviesProduced[msg.sender][movieName].isValue = true;
+        // Has to be the owner
+        require(msg.sender == OWNER);
+
+        moviesProduced[producer][movieName].releaseDate = releaseDate;
+        moviesProduced[producer][movieName].raterSum = 0;
+        moviesProduced[producer][movieName].ratingSum = 0;
+        moviesProduced[producer][movieName].genre = genre;
+        moviesProduced[producer][movieName].casts = casts;
+        moviesProduced[producer][movieName].desc = desc;
+        moviesProduced[producer][movieName].country = country;
+        moviesProduced[producer][movieName].moviePrice = moviePrice;
+        moviesProduced[producer][movieName].isValue = true;
     }
-    
-    function addCast(string movieName, string castName) public returns (bool){
-        // Has to be a producer
-        require(bytes(producers[msg.sender]).length != 0 || msg.sender == OWNER);
-        // Has to be the producer of this movie
-        require(moviesProduced[msg.sender][movieName].isValue || msg.sender == OWNER);
-        
-        if(moviesProduced[msg.sender][movieName].casts.length < MAX_CAST_NUM){
-            moviesProduced[msg.sender][movieName].casts.push(castName);
-            return true;
-        }
-        return false;
-    }
-    
+
     function rateMovie(address producer, string movieName, uint rate) public returns (bool){
         if(rate > 10) return false;
 
         // Check overflow
         require(moviesProduced[producer][movieName].raterSum + 1 > moviesProduced[producer][movieName].raterSum);
         require(moviesProduced[producer][movieName].ratingSum + rate >= moviesProduced[producer][movieName].ratingSum);
-        
+
         moviesProduced[producer][movieName].raterSum += 1;
         moviesProduced[producer][movieName].ratingSum += rate;
         return true;
     }
-    
+
     function writeReview(
         address producer,
         string movieName,
@@ -246,19 +232,19 @@ contract movieWeb {
         tokenUsed.transfer(producer, moviesProduced[producer][movieName].moviePrice - 1);
         return true;
     }
-    
+
     function setBuyPrice(uint tokenPerEther) public onlyOwner {
         tokenPerEther_buyPrice = tokenPerEther;
     }
-    
+
     function setSellPrice(uint tokenPerEther) public onlyOwner {
         tokenPerEther_sellPrice = tokenPerEther;
     }
     // =========================================================================
     // =========================================================================
-    
-    
-    
+
+
+
     // =========================================================================
     // ======================== BUY/SELL FUNCTION ==============================
     // =========================================================================
@@ -269,7 +255,7 @@ contract movieWeb {
         require(tokenUsed.transfer(msg.sender, amount));
         return true;
     }
-    
+
     function sellToken(address _from, uint amount) public returns (bool) {
         require(address(this).balance >= amount * 1 ether / tokenPerEther_sellPrice);
         require(tokenUsed.transferFrom(_from, this, amount));
@@ -278,16 +264,16 @@ contract movieWeb {
     }
     // =========================================================================
     // =========================================================================
-    
-    
-    
+
+
+
     // =========================================================================
     // ======================== DELETION FUNCTION ==============================
     // =========================================================================
     function deleteReview(address producer, string movieName, address reviewer) public onlyOwner {
         moviesProduced[producer][movieName].reviews[reviewer] = "";
     }
-    
+
     // Expensive function
     function deleteMovie(address producer, string movieName) public onlyOwner {
         uint totalReviewer = moviesProduced[producer][movieName].reviewer.length;
@@ -300,7 +286,7 @@ contract movieWeb {
             moviesWatched[userKeys[j]][producer][movieName] = 0;
         }
     }
-    
+
     function deleteProducer(address producer) public onlyOwner {
         delete producers[producer];
         for(uint i=0; i<producerKeys.length; i++){
@@ -310,7 +296,7 @@ contract movieWeb {
             }
         }
     }
-    
+
     function deleteUser(address user) public onlyOwner {
         delete users[user];
         for(uint i=0; i<userKeys.length; i++){
@@ -320,18 +306,17 @@ contract movieWeb {
             }
         }
     }
-    
-    
+
+
     function kill() public onlyOwner {
         tokenUsed.transfer(OWNER, tokenUsed.balanceOf(address(this)));
         selfdestruct(OWNER);
     }
     // =========================================================================
     // =========================================================================
-    
-    
+
+
     // Fallback function
     function () public payable {
     }
 }
-

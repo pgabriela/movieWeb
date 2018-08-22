@@ -1,102 +1,102 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: black;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: black;
 }
 
 #title {
-  font-size: 38px;
-  color: #d0a107;
-  font-family: "Courier New";
-  font-weight: bold;
-  margin-left: 15px
+    font-size: 38px;
+    color: #d0a107;
+    font-family: "Courier New";
+    font-weight: bold;
+    margin-left: 15px
 }
 
 .navbar {
-  position: fixed;
-  z-index: 10;
-  background-color: rgba(0,0,0,0.3);
-  display: flex;
-  width: 100%;
+    position: fixed;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    position: sticky;
-    background-color: rgba(240,240,240,1);
-  }
+    .navbar {
+        position: sticky;
+        background-color: rgba(240, 240, 240, 1);
+    }
 }
 
 #logo {
-  margin-left: 35px;
-  margin-top: -5px;
+    margin-left: 35px;
+    margin-top: -5px;
 }
 
 #leftnav {
-  flex-grow: 20;
+    flex-grow: 20;
 }
 
 .input-group {
-  margin: 15px;
+    margin: 15px;
 }
 
-@media (max-width: 768px){
-  .input-group {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
+@media (max-width: 768px) {
+    .input-group {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
 }
 
 #login {
-  width: 20%;
-  padding: 4px;
-  font-size: 20px;
+    width: 20%;
+    padding: 4px;
+    font-size: 20px;
 }
 
 .form-control, .form-control:focus {
-  border-color: #ffc107;
-  border-width: 1px;
-  border-style: solid;
-  box-shadow: none;
-  color: #ffc107;
-  font-size: 20px;
+    border-color: #ffc107;
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: none;
+    color: #ffc107;
+    font-size: 20px;
 }
 
 .form-control::placeholder {
-  color: #ffc107;
+    color: #ffc107;
 }
 
 #searchBar {
-  background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 #smallMovies {
-  margin: 30px;
-  margin-left: 100px !important;
+    margin: 30px;
+    margin-left: 100px !important;
 }
 
-#smallMovies > h4 {
-  color: #ffc107;
+#smallMovies>h4 {
+    color: #ffc107;
 }
 
 .card {
-  background-color: black;
-  border-color: rgba(255,255,255,0.1);
-  border-width: 2px;
-  border-style: solid;
+    background-color: black;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-width: 2px;
+    border-style: solid;
 }
 
 .dropdown-item {
-  color: #ffc107;
-  font-weight: bold;
+    color: #ffc107;
+    font-weight: bold;
 }
 
 .dropdown-toggle {
-  color: #ffc107;
-  font-weight: bold;
-  font-size: 20px;
+    color: #ffc107;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .dropdown-menu {
-  margin: -2px;
-  background-color: rgba(0,0,0,0.3);
+    margin: -2px;
+    background-color: rgba(0, 0, 0, 0.3);
 }

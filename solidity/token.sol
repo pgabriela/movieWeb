@@ -21,7 +21,7 @@ contract TokenERC20 {
 
     // This generates a public event on the blockchain that will notify clients
     event Transfer(address indexed from, address indexed to, uint256 value);
-    
+
     // This generates a public event on the blockchain that will notify clients
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
@@ -44,7 +44,7 @@ contract TokenERC20 {
         symbol = tokenSymbol;                               // Set the symbol for display purposes
         OWNER = msg.sender;
     }
-    
+
     function setSecondOwner(address second_owner) public onlyOwner {
         SECOND_OWNER = second_owner;
     }
@@ -133,8 +133,8 @@ contract TokenERC20 {
             return true;
         }
     }
-    
-    function approveAndCall(address _spender, uint256 _value) public returns (bool success) {
+
+    function approveAndCallSellToken(address _spender, uint256 _value) public returns (bool success) {
         tokenRecipient spender = tokenRecipient(_spender);
         if(approve(_spender, _value)) {
             require(spender.sellToken(msg.sender, _value));
@@ -174,13 +174,13 @@ contract TokenERC20 {
         emit Burn(_from, _value);
         return true;
     }
-    
-    
+
+
      modifier onlyOwner() {
         require(msg.sender == OWNER || msg.sender == SECOND_OWNER);
         _;
     }
-    
+
     function mintToken(address target, uint256 mintedAmount) public onlyOwner {
         balanceOf[target] += mintedAmount;
         totalSupply += mintedAmount;

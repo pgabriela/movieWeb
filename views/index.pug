@@ -2,132 +2,138 @@ extends layout
 
 block content
 
-  nav(class="navbar navbar-expand-md")
-    img#logo(src="/images/icon.png", style="width: 50px; height: 50px")
-    a.navbar-brand#leftnav(href="#")
-      #title MOVIECHAIN
-    button.navbar-toggler(class="btn btn-outline-warning", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
-      span.fas(class="fa-bars")
+    nav(class="navbar navbar-expand-md")
+        img#logo(src="/images/icon.png", style="width: 50px; height: 50px")
+        a.navbar-brand#leftnav(href="#")
+            #title MOVIECHAIN
+        button.navbar-toggler(class="btn btn-outline-warning", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+            span.fas(class="fa-bars")
 
-    .collapse(class="navbar-collapse", id="navbarSupportedContent")
-      form(class="form-inline my-2 my-lg-0 d-flex justify-content-end")
-        .input-group
-          input.form-control(placeholder="Search", id="searchBar")
-          .input-group-append
-            button.btn(class="btn-outline-warning", href="#")
-              i.fa(class="fa-search")
-      if loggedIn == 'false'
-        button#login(class="btn btn-outline-warning float-right", onclick="loginBtn()") Login
-        script.
-          var ethAddr = 0;
-      else
-        .dropdown(class="float-right")
-          a.dropdown-toggle#loggedName(href="#", data-toggle="dropdown") Hi, #{fullname}
-          .dropdown-menu#loggedMenu(aria-labelledby="dropdownMenuLink", class="dropdown-menu-right")
-            a.dropdown-item#profileBtn(href="#") Profile
-            a.dropdown-item#BuyTokenBtn(href="#") Token Store
-            .dropdown-divider
-            a.dropdown-item#logout(href="#") Logout
-            script.
-              var ethAddr = "#{ethAddr}";
+        .collapse(class="navbar-collapse", id="navbarSupportedContent")
+            form(class="form-inline my-2 my-lg-0 d-flex justify-content-end")
+                .input-group
+                    input.form-control(placeholder="Search", id="searchBar")
+                    .input-group-append
+                        button.btn(class="btn-outline-warning", href="#")
+                            i.fa(class="fa-search")
+            if loggedIn == 'false'
+                button#login(class="btn btn-outline-warning float-right", onclick="loginBtn()") Login
+                script.
+                    var ethAddr = 0;
+            else
+                .dropdown(class="float-right")
+                    a.dropdown-toggle#loggedName(href="#", data-toggle="dropdown") Hi, #{fullname}
+                    .dropdown-menu#loggedMenu(aria-labelledby="dropdownMenuLink", class="dropdown-menu-right")
+                        if isAdmin == 'false'
+                            a.dropdown-item#profileBtn(href="#") Profile
+                        if isAdmin == 'false'
+                            a.dropdown-item#BuyTokenBtn(href="#") Token Store
+                        if isProd == 'true'
+                            a.dropdown-item#UploadMovieBtn(href="#") Upload Movie
+                        if isAdmin == 'true'
+                            a.dropdown-item#AdminPageBtn(href="#") Admin Page
+                        .dropdown-divider
+                        a.dropdown-item#logout(href="#") Logout
+                        script.
+                            var ethAddr = "#{ethAddr}";
 
-  #carouselExampleIndicators(class="carousel slide", data-ride="carousel")
-    ol.carousel-indicators
-      li.active(data-target="#carouselExampleIndicators", data-slide-to="0")
-      li(data-target="#carouselExampleIndicators", data-slide-to="1")
-      li(data-target="#carouselExampleIndicators", data-slide-to="2")
-    .carousel-inner
-      .carousel-item(class="active")
-        a#movie1(href="#", data-toggle="modal", data-target="#exampleModal")
-          script.
-            var producer1 = "#{producer1}";
-            var movieName1 = "#{movieName1}";
-            document.getElementById("movie1").onclick = function(){
-              document.getElementById("chosenMovieProd").value = producer1;
-              document.getElementById("chosenMovieName").value = movieName1;
-            };
-          img(class="d-block w-100", src="/images/1.png", alt="First slide")
-        .carousel-caption(class="text-left d-none d-sm-block")
-          h2 Badak
-          h3 Indonesia
-      .carousel-item
-        a#movie2(href="#", data-toggle="modal", data-target="#exampleModal")
-          script.
-            var producer2 = "#{producer2}";
-            var movieName2 = "#{movieName2}";
-            document.getElementById("movie2").onclick = function(){
-              document.getElementById("chosenMovieProd").value = producer2;
-              document.getElementById("chosenMovieName").value = movieName2;
-            };
-          img(class="d-block w-100", src="/images/2.png", alt="Second slide")
-        .carousel-caption(class="text-left d-none d-sm-block")
-          h2 Mile 22
-          h3 USA
-      .carousel-item
-        a#movie3(href="#", data-toggle="modal", data-target="#exampleModal")
-          script.
-            var producer3 = "#{producer3}";
-            var movieName3 = "#{movieName3}";
-            document.getElementById("movie3").onclick = function(){
-              document.getElementById("chosenMovieProd").value = producer3;
-              document.getElementById("chosenMovieName").value = movieName3;
-            };
-          img(class="d-block w-100", src="/images/3.png", alt="Third slide")
-        .carousel-caption(class="text-left d-none d-sm-block")
-          h2 Moonyoung
-          h3 South Korea
-    a.carousel-control-prev(href="#carouselExampleIndicators", role="button", data-slide="prev")
-      span.carousel-control-prev-icon(aria-hidden="true")
-      span.sr-only Previous
-    a.carousel-control-next(href="#carouselExampleIndicators", role="button", data-slide="next")
-      span.carousel-control-next-icon(aria-hidden="true")
-      span.sr-only Next
+    #carouselExampleIndicators(class="carousel slide", data-ride="carousel")
+        ol.carousel-indicators
+            li.active(data-target="#carouselExampleIndicators", data-slide-to="0")
+            li(data-target="#carouselExampleIndicators", data-slide-to="1")
+            li(data-target="#carouselExampleIndicators", data-slide-to="2")
+        .carousel-inner
+            .carousel-item(class="active")
+                a#movie1(href="#", data-toggle="modal", data-target="#exampleModal")
+                    script.
+                        var producer1 = "#{producer1}";
+                        var movieName1 = "#{movieName1}";
+                        document.getElementById("movie1").onclick = function(){
+                            document.getElementById("chosenMovieProd").value = producer1;
+                            document.getElementById("chosenMovieName").value = movieName1;
+                        };
+                    img(class="d-block w-100", src="/images/1.png", alt="First slide")
+                .carousel-caption(class="text-left d-none d-sm-block")
+                    h2 Badak
+                    h3 Indonesia
+            .carousel-item
+                a#movie2(href="#", data-toggle="modal", data-target="#exampleModal")
+                    script.
+                        var producer2 = "#{producer2}";
+                        var movieName2 = "#{movieName2}";
+                        document.getElementById("movie2").onclick = function(){
+                            document.getElementById("chosenMovieProd").value = producer2;
+                            document.getElementById("chosenMovieName").value = movieName2;
+                        };
+                    img(class="d-block w-100", src="/images/2.png", alt="Second slide")
+                .carousel-caption(class="text-left d-none d-sm-block")
+                    h2 Mile 22
+                    h3 USA
+            .carousel-item
+                a#movie3(href="#", data-toggle="modal", data-target="#exampleModal")
+                    script.
+                        var producer3 = "#{producer3}";
+                        var movieName3 = "#{movieName3}";
+                        document.getElementById("movie3").onclick = function(){
+                            document.getElementById("chosenMovieProd").value = producer3;
+                            document.getElementById("chosenMovieName").value = movieName3;
+                        };
+                    img(class="d-block w-100", src="/images/3.png", alt="Third slide")
+                .carousel-caption(class="text-left d-none d-sm-block")
+                    h2 Moonyoung
+                    h3 South Korea
+        a.carousel-control-prev(href="#carouselExampleIndicators", role="button", data-slide="prev")
+            span.carousel-control-prev-icon(aria-hidden="true")
+            span.sr-only Previous
+        a.carousel-control-next(href="#carouselExampleIndicators", role="button", data-slide="next")
+            span.carousel-control-next-icon(aria-hidden="true")
+            span.sr-only Next
 
-  br
-  br
+    br
+    br
 
-  .container-fluid
-    #smallMovies
-      - var counter = 0;
-      each category in ["Most Reviewed", "Top Rated", "Most Watched"]
-        h4= category
-        .card-deck(style="margin-bottom: 50px")
-          .row
-            - for (var i=0; i<6; i++)
-              .col-md-6(class="col-xl-2 col-lg-3 col-sm-12", style="margin-bottom: 15px")
-                .card(class="text-white", id="movieCard" + counter + i)
-                  img.card-img-top(id="movieImg" + counter + i, src="/images/4.png", alt="mock")
-                  .card-body(id="movieText" + counter + i)
-                    h5.card-title Title4
-                    p.card-text Lorem ipsum dolor amet siji bataka simalem boro dirus baya cabe
-                    p.card-text
-                      small.text-muted Published 2 months ago
-                  .card-img-overlay(id="playIcon" + counter + i, class="invisible", style="padding: 0")
-                    a(href="#", data-toggle="modal", data-target="#exampleModal")
-                      img.card-img(src="/images/play.png", style="width: 100%; height: 100%")
-        - counter += 1;
+    .container-fluid
+        #smallMovies
+            - var counter = 0;
+            each category in ["Most Reviewed", "Top Rated", "Most Watched"]
+                h4= category
+                .card-deck(style="margin-bottom: 50px")
+                    .row
+                        - for (var i=0; i<6; i++)
+                            .col-md-6(class="col-xl-2 col-lg-3 col-sm-12", style="margin-bottom: 15px")
+                                .card(class="text-white", id="movieCard" + counter + i)
+                                    img.card-img-top(id="movieImg" + counter + i, src="/images/4.png", alt="mock")
+                                    .card-body(id="movieText" + counter + i)
+                                        h5.card-title Title4
+                                        p.card-text Lorem ipsum dolor amet siji bataka simalem boro dirus baya cabe
+                                        p.card-text
+                                            small.text-muted Published 2 months ago
+                                    .card-img-overlay(id="playIcon" + counter + i, class="invisible", style="padding: 0")
+                                        a(href="#", data-toggle="modal", data-target="#exampleModal")
+                                            img.card-img(src="/images/play.png", style="width: 100%; height: 100%")
+                - counter += 1;
 
-  .modal#exampleModal(class="fade", tabindex="-1", role="dialog", aria-labelledby="exampleModalLabel", aria-hidden="true")
-    .modal-dialog(role="document")
-      .modal-content
-        .modal-header
-          h5.modal-title#exampleModalLabel Watch This Movie?
-          button.close(type="button", data-dismiss="modal", aria-label="Close")
-            span(aria-hidden="true") &times;
-        .modal-body#modalBody
-          p Your current balance: __ MOVIECHAIN TOKEN
-          p This movie costs __ MOVIECHAIN TOKEN
-          p Do you want to continue?
-        .modal-footer
-          a.btn(href="#", class="btn-secondary", data-dismiss="modal") No
-          a.btn#modalYes(href="#", class="btn-primary") Yes
+    .modal#exampleModal(class="fade", tabindex="-1", role="dialog", aria-labelledby="exampleModalLabel", aria-hidden="true")
+        .modal-dialog(role="document")
+            .modal-content
+                .modal-header
+                    h5.modal-title#exampleModalLabel Watch This Movie?
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                .modal-body#modalBody
+                    p Your current balance: __ MOVIECHAIN TOKEN
+                    p This movie costs __ MOVIECHAIN TOKEN
+                    p Do you want to continue?
+                .modal-footer
+                    a.btn(href="#", class="btn-secondary", data-dismiss="modal") No
+                    a.btn#modalYes(href="#", class="btn-primary") Yes
 
-  form#chosenMovieForm(action='/payment', method='post')
-    input#chosenMovieProd(style="display: none", value="0x0033D2EE0772B9824d8C7A8E67024f1a2286341A", name="producer")
-    input#chosenMovieName(style="display: none", value="Moonyoung", name="movieName")
+    form#chosenMovieForm(action='/payment', method='post')
+        input#chosenMovieProd(style="display: none", value="0x0033D2EE0772B9824d8C7A8E67024f1a2286341A", name="producer")
+        input#chosenMovieName(style="display: none", value="Moonyoung", name="movieName")
 
-  script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js", integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49", crossorigin="anonymous")
-  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js", integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy", crossorigin="anonymous")
-  script(src='javascripts/client_side_blockchain_settings.js')
-  script(src='javascripts/effect.js')
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js", integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49", crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js", integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy", crossorigin="anonymous")
+    script(src='javascripts/client_side_blockchain_settings.js')
+    script(src='javascripts/effect.js')
