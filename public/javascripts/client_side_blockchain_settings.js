@@ -1,5 +1,5 @@
 var token_addr = "0xb13b5e34092e21a53cb1110a3050bd0e117dc15d";
-var contract_addr = "0x425793E22D2798f6371D09455FA519784502AB08";
+var contract_addr = "0x79a8FC3D98Fc84c9BC2B3a737EA992321a1b86A3";
 var token_abi = [{
     "constant": true,
     "inputs": [],
@@ -344,26 +344,6 @@ var contract_abi = [{
     "stateMutability": "view",
     "type": "function"
 }, {
-    "constant": true,
-    "inputs": [{
-        "name": "producer",
-        "type": "address"
-    }, {
-        "name": "movieName",
-        "type": "string"
-    }, {
-        "name": "index",
-        "type": "uint256"
-    }],
-    "name": "getMovieReviewAtIndex",
-    "outputs": [{
-        "name": "",
-        "type": "string"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-}, {
     "constant": false,
     "inputs": [{
         "name": "producer",
@@ -526,6 +506,26 @@ var contract_abi = [{
     "stateMutability": "nonpayable",
     "type": "function"
 }, {
+    "constant": false,
+    "inputs": [{
+        "name": "producer",
+        "type": "address"
+    }, {
+        "name": "movieName",
+        "type": "string"
+    }, {
+        "name": "comment",
+        "type": "string"
+    }, {
+        "name": "rate",
+        "type": "uint256"
+    }],
+    "name": "writeReview",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
     "constant": true,
     "inputs": [{
         "name": "producer",
@@ -535,6 +535,46 @@ var contract_abi = [{
         "type": "string"
     }],
     "name": "getMovieReviewCount",
+    "outputs": [{
+        "name": "",
+        "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "constant": true,
+    "inputs": [{
+        "name": "producer",
+        "type": "address"
+    }, {
+        "name": "_user",
+        "type": "address"
+    }, {
+        "name": "movieName",
+        "type": "string"
+    }],
+    "name": "hasReviewed",
+    "outputs": [{
+        "name": "",
+        "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "constant": true,
+    "inputs": [{
+        "name": "producer",
+        "type": "address"
+    }, {
+        "name": "movieName",
+        "type": "string"
+    }, {
+        "name": "index",
+        "type": "uint256"
+    }],
+    "name": "getMovieReviewRatingAtIndex",
     "outputs": [{
         "name": "",
         "type": "uint256"
@@ -596,10 +636,50 @@ var contract_abi = [{
         "name": "producer",
         "type": "address"
     }, {
+        "name": "movieName",
+        "type": "string"
+    }, {
+        "name": "index",
+        "type": "uint256"
+    }],
+    "name": "getMovieReviewCommentAtIndex",
+    "outputs": [{
+        "name": "",
+        "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "constant": true,
+    "inputs": [{
+        "name": "producer",
+        "type": "address"
+    }, {
         "name": "name",
         "type": "string"
     }],
     "name": "getMovieCasts",
+    "outputs": [{
+        "name": "",
+        "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "constant": true,
+    "inputs": [{
+        "name": "producer",
+        "type": "address"
+    }, {
+        "name": "movieName",
+        "type": "string"
+    }, {
+        "name": "index",
+        "type": "uint256"
+    }],
+    "name": "getMovieReviewReviewerNameAtIndex",
     "outputs": [{
         "name": "",
         "type": "string"
@@ -636,43 +716,6 @@ var contract_abi = [{
     }],
     "name": "addMovie",
     "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{
-        "name": "producer",
-        "type": "address"
-    }, {
-        "name": "movieName",
-        "type": "string"
-    }, {
-        "name": "review",
-        "type": "string"
-    }],
-    "name": "writeReview",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{
-        "name": "producer",
-        "type": "address"
-    }, {
-        "name": "movieName",
-        "type": "string"
-    }, {
-        "name": "rate",
-        "type": "uint256"
-    }],
-    "name": "rateMovie",
-    "outputs": [{
-        "name": "",
-        "type": "bool"
-    }],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"

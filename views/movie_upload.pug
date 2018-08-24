@@ -41,9 +41,16 @@ body
                 input.form-control#MovieDescription(type="text" name="MovieDescription" placeholder="John Doe was born in 1967 in ...")
                 script.
                     var ethAddr = "#{ethAddr}";
+            .row(style="margin-bottom: 10px")
+                .col
+                    p Movie Picture (Portrait)
+                    input.form-control#uploadPic(type="file" name="uploadPic" accept=".jpg")
+                .col
+                    p Movie Banner (Landscape)
+                    input.form-control#uploadBanner(type="file" name="uploadBanner" accept=".jpg")
             button#submitBtn.btn(class="btn-lg upload-btn" type="submit") Submit
 
-    input#upload-input(type="file" name="upload")
+    input#upload-input(type="file" name="uploadMov")
     br
 
     script(src="https://code.jquery.com/jquery-2.2.0.min.js")

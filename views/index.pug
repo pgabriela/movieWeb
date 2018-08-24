@@ -44,44 +44,47 @@ block content
             li(data-target="#carouselExampleIndicators", data-slide-to="2")
         .carousel-inner
             .carousel-item(class="active")
-                a#movie1(href="#", data-toggle="modal", data-target="#exampleModal")
+                a#movie1(href="#", data-toggle="modal", data-target="#exampleModal2")
                     script.
                         var producer1 = "#{producer1}";
                         var movieName1 = "#{movieName1}";
                         document.getElementById("movie1").onclick = function(){
                             document.getElementById("chosenMovieProd").value = producer1;
                             document.getElementById("chosenMovieName").value = movieName1;
+                            document.getElementById("exampleModalLabel2").innerHTML = movieName1;
                         };
-                    img(class="d-block w-100", src="/images/1.png", alt="First slide")
+                    img#banner1(class="d-block w-100", src="/images/" + producer1 + "-" + movieName1Lower + "-banner.jpg", alt="First slide")
                 .carousel-caption(class="text-left d-none d-sm-block")
-                    h2 Badak
-                    h3 Indonesia
+                    h2= movieName1
+                    h3= movieCountry1
             .carousel-item
-                a#movie2(href="#", data-toggle="modal", data-target="#exampleModal")
+                a#movie2(href="#", data-toggle="modal", data-target="#exampleModal2")
                     script.
                         var producer2 = "#{producer2}";
                         var movieName2 = "#{movieName2}";
                         document.getElementById("movie2").onclick = function(){
                             document.getElementById("chosenMovieProd").value = producer2;
                             document.getElementById("chosenMovieName").value = movieName2;
+                            document.getElementById("exampleModalLabel2").innerHTML = movieName2;
                         };
-                    img(class="d-block w-100", src="/images/2.png", alt="Second slide")
+                    img#banner2(class="d-block w-100", src="/images/" + producer2 + "-" + movieName2Lower + "-banner.jpg", alt="Second slide")
                 .carousel-caption(class="text-left d-none d-sm-block")
-                    h2 Mile 22
-                    h3 USA
+                    h2= movieName2
+                    h3= movieCountry2
             .carousel-item
-                a#movie3(href="#", data-toggle="modal", data-target="#exampleModal")
+                a#movie3(href="#", data-toggle="modal", data-target="#exampleModal2")
                     script.
                         var producer3 = "#{producer3}";
                         var movieName3 = "#{movieName3}";
                         document.getElementById("movie3").onclick = function(){
                             document.getElementById("chosenMovieProd").value = producer3;
                             document.getElementById("chosenMovieName").value = movieName3;
+                            document.getElementById("exampleModalLabel2").innerHTML = movieName3;
                         };
-                    img(class="d-block w-100", src="/images/3.png", alt="Third slide")
+                    img#banner3(class="d-block w-100", src="/images/" + producer3 + "-" + movieName3Lower + "-banner.jpg", alt="Third slide")
                 .carousel-caption(class="text-left d-none d-sm-block")
-                    h2 Moonyoung
-                    h3 South Korea
+                    h2= movieName3
+                    h3= movieCountry3
         a.carousel-control-prev(href="#carouselExampleIndicators", role="button", data-slide="prev")
             span.carousel-control-prev-icon(aria-hidden="true")
             span.sr-only Previous
@@ -94,24 +97,61 @@ block content
 
     .container-fluid
         #smallMovies
-            - var counter = 0;
-            each category in ["Most Reviewed", "Top Rated", "Most Watched"]
-                h4= category
-                .card-deck(style="margin-bottom: 50px")
-                    .row
-                        - for (var i=0; i<6; i++)
-                            .col-md-6(class="col-xl-2 col-lg-3 col-sm-12", style="margin-bottom: 15px")
-                                .card(class="text-white", id="movieCard" + counter + i)
-                                    img.card-img-top(id="movieImg" + counter + i, src="/images/4.png", alt="mock")
-                                    .card-body(id="movieText" + counter + i)
-                                        h5.card-title Title4
-                                        p.card-text Lorem ipsum dolor amet siji bataka simalem boro dirus baya cabe
-                                        p.card-text
-                                            small.text-muted Published 2 months ago
-                                    .card-img-overlay(id="playIcon" + counter + i, class="invisible", style="padding: 0")
-                                        a(href="#", data-toggle="modal", data-target="#exampleModal")
-                                            img.card-img(src="/images/play.png", style="width: 100%; height: 100%")
-                - counter += 1;
+            h4 Most Reviewed
+            .card-deck(style="margin-bottom: 50px")
+                .row
+                    - var counter = 0;
+                    -
+                        function toTitleCase(str) {
+                            return str.replace(
+                                /\w\S*/g,
+                                function(txt) {
+                                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                                }
+                            );
+                        }
+
+                        function limiter(str) {
+                            if(str.length > 200){
+                                return str.slice(0, 197) + "...";
+                            }
+                            return str;
+                        }
+
+                    each mov in mostReviewed
+                        .col-md-6(class="col-xl-2 col-lg-3 col-sm-12", style="margin-bottom: 15px")
+                            input.invisible(id="movieProdValue0" + counter, value=mov.prodAddr)
+                            input.invisible(id="movieTitleValue0" + counter, value=toTitleCase(mov.title))
+                            .card(class="text-white", id="movieCard0" + counter, style="height: 100%")
+                                img.card-img-top(id="movieImg0" + counter, src="/images/" + mov.prodAddr + "-" + mov.title.toLowerCase() + ".jpg", alt="mock")
+                                .card-header
+                                    h5.card-title= toTitleCase(mov.title)
+                                .card-body(id="movieText0" + counter)
+                                    p.card-text= limiter(mov.description)
+                                .card-footer(class="text-muted")= mov.releasedate
+                                .card-img-overlay(id="playIcon0" + counter, class="invisible", style="padding: 0")
+                                    a(href="#", data-toggle="modal", data-target="#exampleModal2")
+                                        img.card-img(src="/images/play.png", style="width: 100%; height: 100%")
+                        - counter++;
+            h4 Top Rated
+            .card-deck(style="margin-bottom: 50px")
+                .row
+                    - var counter2 = 0;
+                    each mov in topRated
+                        .col-md-6(class="col-xl-2 col-lg-3 col-sm-12", style="margin-bottom: 15px")
+                            input.invisible(id="movieProdValue1" + counter2, value=mov.prodAddr)
+                            input.invisible(id="movieTitleValue1" + counter2, value=toTitleCase(mov.title))
+                            .card(class="text-white", id="movieCard1" + counter2, style="height: 100%")
+                                img.card-img-top(id="movieImg1" + counter2, src="/images/" + mov.prodAddr + "-" + mov.title.toLowerCase() + ".jpg", alt="mock")
+                                .card-header
+                                    h5.card-title= toTitleCase(mov.title)
+                                .card-body(id="movieText1" + counter2)
+                                    p.card-text= limiter(mov.description)
+                                .card-footer(class="text-muted")= mov.releasedate
+                                .card-img-overlay(id="playIcon1" + counter2, class="invisible", style="padding: 0")
+                                    a(href="#", data-toggle="modal", data-target="#exampleModal2")
+                                        img.card-img(src="/images/play.png", style="width: 100%; height: 100%")
+                        - counter2++;
 
     .modal#exampleModal(class="fade", tabindex="-1", role="dialog", aria-labelledby="exampleModalLabel", aria-hidden="true")
         .modal-dialog(role="document")
@@ -127,6 +167,22 @@ block content
                 .modal-footer
                     a.btn(href="#", class="btn-secondary", data-dismiss="modal") No
                     a.btn#modalYes(href="#", class="btn-primary") Yes
+
+    .modal#exampleModal2(class="fade", tabindex="-1", role="dialog", aria-labelledby="exampleModalLabel2", aria-hidden="true")
+        .modal-dialog(role="document")
+            .modal-content
+                .modal-header
+                    h5.modal-title#exampleModalLabel2 Moonyoung
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                .modal-body#modalBody
+                    .row(style="margin: 5px")
+                        .col
+                            p.text-center
+                                button#detailsBtn.btn(class="btn-success", href="#", style="width: 75%") Details
+                        .col
+                            p.text-center
+                                button#WatchBtn.btn(class="btn-danger", href="#", style="width: 75%", data-toggle="modal", data-target="#exampleModal") Watch
 
     form#chosenMovieForm(action='/payment', method='post')
         input#chosenMovieProd(style="display: none", value="0x0033D2EE0772B9824d8C7A8E67024f1a2286341A", name="producer")

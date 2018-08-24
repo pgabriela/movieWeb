@@ -43,6 +43,8 @@ $('#uploadForm').submit(function(e) {
     e.preventDefault();
 
     var files = $('#upload-input').get(0).files;
+    var filesBanner = $('#uploadBanner').get(0).files;
+    var filesPic = $('#uploadPic').get(0).files;
 
     if (files.length > 0) {
         // create a FormData object which will be sent as the data payload in the
@@ -50,7 +52,9 @@ $('#uploadForm').submit(function(e) {
         var formData = new FormData();
 
         // add the files to formData object for the data payload
-        formData.append('upload', files[0], files[0].name);
+        formData.append('uploadMov', files[0], files[0].name);
+        formData.append('uploadPic', filesPic[0], filesPic[0].name);
+        formData.append('uploadBanner', filesBanner[0], filesBanner[0].name);
         formData.append('MovieTitle', $('#MovieTitle').val());
         formData.append('MovieGenre', $('#MovieGenre').val());
         formData.append('MovieReleaseDate', $('#MovieReleaseDate').val());

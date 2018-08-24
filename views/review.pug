@@ -1,0 +1,97 @@
+extends layout.pug
+
+block extraCSS
+    link(href="stylesheets/styple.css" rel="stylesheet")
+
+block content
+    .container-fluid
+        .row#row1
+            .col-1
+            .col-3
+                .card(class="w-70 bg-dark text-white", style="border-color: white")
+                    a(href="images/" + movieAddr + "-" + movieTitleLower + ".jpg", title="Click to watch original poster" target='_blank')
+                        img.card-img(src="images/" + movieAddr + "-" + movieTitleLower + ".jpg")
+            .col-7
+                .row
+                    h1#font1= movieTitle
+                .row
+                    h2#font2 RATING:&nbsp
+                        small#movieRatingPlace= movieRate
+                .row
+                    h2#font2 PRODUCER :&nbsp
+                        small= prodName
+                .row
+                    h2#font2 GENRE :&nbsp
+                        small= movieGenre
+                .row
+                    h2#font2 RELEASE DATE:&nbsp
+                        small= movieDate
+                .row
+                    h2#font2 COUNTRY :&nbsp
+                        small= movieCountry
+                .row
+                    h2#font2 CASTS :&nbsp
+                        small= movieCasts
+                .row
+                    h2#font2 DESCRIPTION :&nbsp
+                        small= movieDesc
+                .row
+                    h2#font2 MOVIEPRICE :&nbsp
+                        small= moviePrice
+        .row#row1
+            h1.category#font3(style="vertical-align: bottom") Movie Reviews
+            h5.category#font4(class="invisible" style="vertical-align: bottom") Movie Reviews
+        #reviewForm
+            .row#row2
+                script.
+                    var ethAddr = "#{ethAddr}";
+                    var userName = "#{userName}";
+                    var movieTitle = "#{movieTitle}";
+                    var movieAddr = "#{movieAddr}";
+                .col-1
+                .col-1
+                    span.star-input
+                        span.input
+                            input#p1(type="radio" name="star-input" value="1")
+                            label(for="p1") 1
+                            input#p2(type="radio" name="star-input" value="2")
+                            label(for="p2") 2
+                            input#p3(type="radio" name="star-input" value="3")
+                            label(for="p3") 3
+                            input#p4(type="radio" name="star-input" value="4")
+                            label(for="p4") 4
+                            input#p5(type="radio" name="star-input" value="5")
+                            label(for="p5") 5
+                            input#p6(type="radio" name="star-input" value="6")
+                            label(for="p6") 6
+                            input#p7(type="radio" name="star-input" value="7")
+                            label(for="p7") 7
+                            input#p8(type="radio" name="star-input" value="8")
+                            label(for="p8") 8
+                            input#p9(type="radio" name="star-input" value="9")
+                            label(for="p9") 9
+                            input#p10(type="radio" name="star-input" value="10")
+                            label(for="p10") 10
+                        output#ratingField(for="star-input" style="color: white") #[b 0]/10
+                    script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js')
+                    script(src="javascripts/rating.js")
+                    script(src="javascripts/textlimit.js")
+                    script(src="javascripts/style.js")
+                    script(src="javascripts/client_side_blockchain_settings.js")
+                    script(src="javascripts/reviewFetcher.js")
+                .col-10
+                    form(action="write mongodb url to send our data" method="post")
+                        div
+                            textarea.form-control#commentText(name="review" cols="130" maxlength="300" autofocus required wrap="hard" placeholder="write review less than 300 letters")
+                        .button
+                            button.btn#submitReviewBtn(class="btn-outline-warning") Submit review
+        hr
+        #reviewsPlaceholder
+            .row#row2
+                .col-1
+                .col-2
+                    h6(style="float:left; color:white; font-weight: bold") Ratings
+                .col-7
+                    h6(style="float:left; color:white; font-weight: bold") Comments
+                .col-2
+                    h6(style="float:left; color:white; font-weight: bold") Writer

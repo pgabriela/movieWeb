@@ -1,7 +1,8 @@
 var web3js = 0;
 var account = 0;
+var picRatio = 16/7;
 
-for (var counter = 0; counter < 3; counter++) {
+for (var counter = 0; counter < 2; counter++) {
     for (var i = 0; i < 6; i++) {
         let selector1 = "movieImg" + counter + "" + i;
         let selector2 = "movieText" + counter + "" + i;
@@ -14,7 +15,7 @@ for (var counter = 0; counter < 3; counter++) {
     }
 }
 
-for (var counter = 0; counter < 3; counter++) {
+for (var counter = 0; counter < 2; counter++) {
     for (var i = 0; i < 6; i++) {
         let selector1 = "movieImg" + counter + "" + i;
         let selector2 = "movieText" + counter + "" + i;
@@ -27,7 +28,18 @@ for (var counter = 0; counter < 3; counter++) {
     }
 }
 
+for (let counter = 0; counter < 2; counter++) {
+    for (let i = 0; i < 6; i++) {
+        document.getElementById("movieCard" + counter + "" + i).onclick = function() {
+            document.getElementById("chosenMovieProd").value = document.getElementById("movieProdValue" + counter + "" + i).value;
+            document.getElementById("chosenMovieName").value = document.getElementById("movieTitleValue" + counter + "" + i).value;
+            document.getElementById("exampleModalLabel2").innerHTML = document.getElementById("movieTitleValue" + counter + "" + i).value;
+        };
+    }
+}
+
 $("#exampleModal").on("show.bs.modal", function(event) {
+    $("#exampleModal2").modal('toggle');
     if (web3js != 0) {
         if (account == 0) {
             document.getElementById("modalBody").innerHTML = "<p>Please login first if you want to watch this movie</p>";
@@ -153,6 +165,11 @@ $("#AdminPageBtn").click(function() {
     window.location.href = '/admin';
 });
 
+$("#detailsBtn").click(function(){
+    $("#chosenMovieForm").attr('action', '/review');
+    $("#chosenMovieForm").submit();
+});
+
 $("#profileBtn").hover(function() {
     $(this).css("background-color", "rgba(0,0,0,0.5)");
     $(this).css("color", "#ffc107");
@@ -203,4 +220,31 @@ window.addEventListener('load', function() {
     // Now you can start your app & access web3 freely:
     account = ethAddr;
     console.log(account);
+
+    var bw1 = $("#banner1").width();
+    $("#banner1").height(bw1 / picRatio);
+    $("#banner2").height(bw1 / picRatio);
+    $("#banner3").height(bw1 / picRatio);
 });
+
+window.onresize = function(){
+    let bw1 = $("#banner1").width();
+    let bw2 = $("#banner2").width();
+    let bw3 = $("#banner3").width();
+    if(bw1 != 0){
+        let j = bw1 / picRatio;
+        $("#banner1").height(j);
+        $("#banner2").height(j);
+        $("#banner3").height(j);
+    } else if(bw2 != 0){
+        let j = bw2 / picRatio;
+        $("#banner1").height(j);
+        $("#banner2").height(j);
+        $("#banner3").height(j);
+    } else {
+        let j = bw3 / picRatio;
+        $("#banner1").height(j);
+        $("#banner2").height(j);
+        $("#banner3").height(j);
+    }
+};

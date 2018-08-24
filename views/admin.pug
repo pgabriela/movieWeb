@@ -6,12 +6,13 @@ block content
     .container-fluid
         h4(style="color: red")= errMsg
         h4(style="color: green")= resultMsg
-        form(action='/admin' method='post')
+        form#masterForm(action='/admin' method='post')
             .row
                 .col
                     select#optionSelector.form-control(name='option')
                         option(value="addProducer" selected="selected") Add Producer
                         option(value="addMovie") Add Movie
+                        option(value="deleteMovie") Delete Movie
             .row
                 .col
                     #formInputs

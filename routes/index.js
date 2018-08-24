@@ -11,93 +11,168 @@ var web3 = new Web3(new Web3.providers.HttpProvider(bc_conf.node_url));
 var path = require('path');
 var ethAccPass = require('../ethAccPass');
 var movieDB = require('../models/movie');
+var MoviesSaved = require('../models/MovieSaved');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    if (req.session && req.session.adminId) {
-        Admin.findOne({
-            _id: req.session.adminId
-        }).exec(function(err, adminLogged){
-            if(!err){
-                res.render('index', {
-                    title: 'Homepage',
-                    loggedIn: 'true',
-                    fullname: adminLogged.username,
-                    ethAddr: "",
-                    isProd: 'false',
-                    isAdmin: 'true',
-                    // Movies are still hardcoded
-                    producer1: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                    movieName1: "Badak",
-                    producer2: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                    movieName2: "Mile 22",
-                    producer3: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                    movieName3: "Moonyoung",
+    var theContract = new web3.eth.Contract(bc_conf.contract_abi, bc_conf.contract_addr);
+    MoviesSaved.find({}, function(eMS, rMS){
+        var mostReviewed = [];
+        var topRated = [];
+        var mostReviewedSorted = [];
+        var topRatedSorted = [];
+        for(let movieInDB in rMS){
+            mostReviewed.push(new Promise(function(resolve, reject){
+                theContract.methods.getMovieReviewCount(rMS[movieInDB].prodAddr, toTitleCase(rMS[movieInDB].title)).call({}, function(eRC, rRC){
+                    resolve([movieInDB, parseInt(rRC)]);
                 });
-            }
-        });
-    } else if (req.session && req.session.userId) {
-        User.findOne({
-            _id: req.session.userId
-        }).exec(function(err, userLogged) {
-            if (!err) {
-                Prod.findOne({
-                    ethaddr: userLogged.ethaddr.toLowerCase()
-                }, function(err2, prodLogged){
-                    if(!err2){
-                        if(prodLogged){
-                            req.session.prodId = prodLogged._id;
-                            res.render('index', {
-                                title: 'Homepage',
-                                loggedIn: 'true',
-                                fullname: userLogged.fullname,
-                                ethAddr: userLogged.ethaddr.toLowerCase(),
-                                isProd: 'true',
-                                isAdmin: 'false',
-                                // Movies are still hardcoded
-                                producer1: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                                movieName1: "Badak",
-                                producer2: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                                movieName2: "Mile 22",
-                                producer3: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                                movieName3: "Moonyoung",
-                            });
-                        } else {
-                            res.render('index', {
-                                title: 'Homepage',
-                                loggedIn: 'true',
-                                fullname: userLogged.fullname,
-                                ethAddr: userLogged.ethaddr.toLowerCase(),
-                                isProd: 'false',
-                                isAdmin: 'false',
-                                // Movies are still hardcoded
-                                producer1: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                                movieName1: "Badak",
-                                producer2: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                                movieName2: "Mile 22",
-                                producer3: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-                                movieName3: "Moonyoung",
-                            });
-                        }
+            }));
+        }
+        for(let movieInDB2 in rMS){
+            topRated.push(new Promise(function(resolve, reject){
+                theContract.methods.getMovieRatingSum(rMS[movieInDB2].prodAddr, toTitleCase(rMS[movieInDB2].title)).call({}, function(eRS, rRS){
+                    theContract.methods.getMovieRaterSum(rMS[movieInDB2].prodAddr, toTitleCase(rMS[movieInDB2].title)).call({}, function(eRrS, rRrS){
+                        resolve([movieInDB2, rRrS == 0 ? 0 : rRS / rRrS]);
+                    });
+                });
+            }));
+        }
+        Promise.all(mostReviewed).then(function(mostReviewedDone){
+            mostReviewed = mostReviewedDone;
+            mostReviewed.sort(function(a, b){
+                return b[1] - a[1];
+            });
+            Promise.all(topRated).then(function(topRatedDone){
+                topRated = topRatedDone;
+                topRated.sort(function(a, b){
+                    return b[1] - a[1];
+                });
+                mostReviewed.slice(0, 6);
+                topRated.slice(0, 6);
+                for(var z=0; z<6; z++){
+                    mostReviewedSorted.push(rMS[mostReviewed[z][0]]);
+                }
+                for(var z=0; z<6; z++){
+                    topRatedSorted.push(rMS[topRated[z][0]]);
+                }
+                MoviesSaved.find({}).sort({ _id: -1 }).limit(3).exec(function(eMS3, rMS3){
+                    if(eMS3) throw eMS3;
+                    if (req.session && req.session.adminId) {
+                        Admin.findOne({
+                            _id: req.session.adminId
+                        }).exec(function(err, adminLogged){
+                            if(!err){
+                                res.render('index', {
+                                    title: 'Homepage',
+                                    loggedIn: 'true',
+                                    fullname: adminLogged.username,
+                                    ethAddr: "",
+                                    isProd: 'false',
+                                    isAdmin: 'true',
+                                    producer1: rMS3[0].prodAddr,
+                                    movieName1: toTitleCase(rMS3[0].title),
+                                    movieName1Lower: rMS3[0].title,
+                                    movieCountry1: rMS3[0].country,
+                                    producer2: rMS3[1].prodAddr,
+                                    movieName2: toTitleCase(rMS3[1].title),
+                                    movieName2Lower: rMS3[1].title,
+                                    movieCountry2: rMS3[1].country,
+                                    producer3: rMS3[2].prodAddr,
+                                    movieName3: toTitleCase(rMS3[2].title),
+                                    movieName3Lower: rMS3[2].title,
+                                    movieCountry3: rMS3[2].country,
+                                    mostReviewed: mostReviewedSorted,
+                                    topRated: topRatedSorted
+                                });
+                            }
+                        });
+                    } else if (req.session && req.session.userId) {
+                        User.findOne({
+                            _id: req.session.userId
+                        }).exec(function(err, userLogged) {
+                            if (!err) {
+                                Prod.findOne({
+                                    ethaddr: userLogged.ethaddr.toLowerCase()
+                                }, function(err2, prodLogged){
+                                    if(!err2){
+                                        if(prodLogged){
+                                            req.session.prodId = prodLogged._id;
+                                            res.render('index', {
+                                                title: 'Homepage',
+                                                loggedIn: 'true',
+                                                fullname: userLogged.fullname,
+                                                ethAddr: userLogged.ethaddr.toLowerCase(),
+                                                isProd: 'true',
+                                                isAdmin: 'false',
+                                                producer1: rMS3[0].prodAddr,
+                                                movieName1: toTitleCase(rMS3[0].title),
+                                                movieName1Lower: rMS3[0].title,
+                                                movieCountry1: rMS3[0].country,
+                                                producer2: rMS3[1].prodAddr,
+                                                movieName2: toTitleCase(rMS3[1].title),
+                                                movieName2Lower: rMS3[1].title,
+                                                movieCountry2: rMS3[1].country,
+                                                producer3: rMS3[2].prodAddr,
+                                                movieName3: toTitleCase(rMS3[2].title),
+                                                movieName3Lower: rMS3[2].title,
+                                                movieCountry3: rMS3[2].country,
+                                                mostReviewed: mostReviewedSorted,
+                                                topRated: topRatedSorted
+                                            });
+                                        } else {
+                                            res.render('index', {
+                                                title: 'Homepage',
+                                                loggedIn: 'true',
+                                                fullname: userLogged.fullname,
+                                                ethAddr: userLogged.ethaddr.toLowerCase(),
+                                                isProd: 'false',
+                                                isAdmin: 'false',
+                                                producer1: rMS3[0].prodAddr,
+                                                movieName1: toTitleCase(rMS3[0].title),
+                                                movieName1Lower: rMS3[0].title,
+                                                movieCountry1: rMS3[0].country,
+                                                producer2: rMS3[1].prodAddr,
+                                                movieName2: toTitleCase(rMS3[1].title),
+                                                movieName2Lower: rMS3[1].title,
+                                                movieCountry2: rMS3[1].country,
+                                                producer3: rMS3[2].prodAddr,
+                                                movieName3: toTitleCase(rMS3[2].title),
+                                                movieName3Lower: rMS3[2].title,
+                                                movieCountry3: rMS3[2].country,
+                                                mostReviewed: mostReviewedSorted,
+                                                topRated: topRatedSorted
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.render('index', {
+                            title: 'Homepage',
+                            loggedIn: 'false',
+                            isProd: 'false',
+                            isAdmin: 'false',
+                            producer1: rMS3[0].prodAddr,
+                            movieName1: toTitleCase(rMS3[0].title),
+                            movieName1Lower: rMS3[0].title,
+                            movieCountry1: rMS3[0].country,
+                            producer2: rMS3[1].prodAddr,
+                            movieName2: toTitleCase(rMS3[1].title),
+                            movieName2Lower: rMS3[1].title,
+                            movieCountry2: rMS3[1].country,
+                            producer3: rMS3[2].prodAddr,
+                            movieName3: toTitleCase(rMS3[2].title),
+                            movieName3Lower: rMS3[2].title,
+                            movieCountry3: rMS3[2].country,
+                            mostReviewed: mostReviewedSorted,
+                            topRated: topRatedSorted
+                        });
                     }
                 });
-            }
+            });
         });
-    } else {
-        res.render('index', {
-            title: 'Homepage',
-            loggedIn: 'false',
-            isProd: 'false',
-            isAdmin: 'false',
-            // Movies are still hardcoded
-            producer1: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-            movieName1: "Badak",
-            producer2: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-            movieName2: "Mile 22",
-            producer3: "0x36A696291B5FF6a2Ae57c45E9bf1e6A2981fA357",
-            movieName3: "Moonyoung",
-        });
-    }
+    });
 });
 
 router.get('/login', function(req, res, next) {
@@ -337,8 +412,11 @@ router.post('/upload', function(req, res) {
         var newNewMovie = new movieDB(newMovie);
         newNewMovie.save(function(error) {
             console.log(newNewMovie);
+            console.log(files);
             if (error) throw error;
-            fs.rename(files.upload.path, path.join(form.uploadDir, fields.ethAddr.toLowerCase() + '-' + fields.MovieTitle.toLowerCase() + '.mp4'));
+            fs.rename(files.uploadMov.path, path.join(form.uploadDir, fields.ethAddr.toLowerCase() + '-' + fields.MovieTitle.toLowerCase() + '.mp4'));
+            fs.rename(files.uploadBanner.path, path.join(form.uploadDir, fields.ethAddr.toLowerCase() + '-' + fields.MovieTitle.toLowerCase() + '-banner.jpg'));
+            fs.rename(files.uploadPic.path, path.join(form.uploadDir, fields.ethAddr.toLowerCase() + '-' + fields.MovieTitle.toLowerCase() + '.jpg'));
             res.end('success');
         });
     });
@@ -421,13 +499,31 @@ router.post('/admin', function(req, res, next){
                                 title: movieTitle.toLowerCase()
                             }, function(deleteErr){
                                 if(!deleteErr){
-                                    var currPath = path.join(__dirname, '/../uploads');
-                                    var newPath = path.join(__dirname, '/../movie');
-                                    fs.rename(path.join(currPath, movieAddr + '-' + movieTitle.toLowerCase() + '.mp4'),
-                                        path.join(newPath, movieAddr + '-' + movieTitle.toLowerCase() + '.mp4'));
-                                    res.render('admin', {
-                                        errMsg: "",
-                                        resultMsg: "That movie has successfully been added to movie list"
+                                    var newMovieSaved = {
+                                        title: movieTitle,
+                                        prodAddr: movieAddr,
+                                        releasedate: res10.releasedate,
+                                        genre: res10.genre,
+                                        cast: res10.cast,
+                                        description: res10.description,
+                                        country: res10.country,
+                                        price: res10.price
+                                    };
+                                    var movieSaved = new MoviesSaved(newMovieSaved);
+                                    movieSaved.save(function(errMovieSaved){
+                                        var currPath = path.join(__dirname, '/../uploads');
+                                        var newPath = path.join(__dirname, '/../movie');
+                                        var newPath2 = path.join(__dirname, '/../public/images');
+                                        fs.rename(path.join(currPath, movieAddr + '-' + movieTitle.toLowerCase() + '.mp4'),
+                                            path.join(newPath, movieAddr + '-' + movieTitle.toLowerCase() + '.mp4'));
+                                        fs.rename(path.join(currPath, movieAddr + '-' + movieTitle.toLowerCase() + '.jpg'),
+                                            path.join(newPath2, movieAddr + '-' + movieTitle.toLowerCase() + '.jpg'));
+                                        fs.rename(path.join(currPath, movieAddr + '-' + movieTitle.toLowerCase() + '-banner.jpg'),
+                                            path.join(newPath2, movieAddr + '-' + movieTitle.toLowerCase() + '-banner.jpg'));
+                                        res.render('admin', {
+                                            errMsg: "",
+                                            resultMsg: "'" + movieTitle + "' " + "movie has successfully been added to movie list"
+                                        });
                                     });
                                 }
                             });
@@ -443,10 +539,98 @@ router.post('/admin', function(req, res, next){
                     });
                 }
             })
+        } else if (option == 'deleteMovie'){
+            var movieAddr = req.body.movieAddr.toLowerCase();
+            var movieTitle = req.body.movieTitle.toLowerCase();
+            MoviesSaved.findOneAndDelete({
+                title: movieTitle,
+                prodAddr: movieAddr
+            }, function(eDM, rDM){
+                if(eDM){
+                    res.render('admin', {
+                        errMsg: "Error occured when trying to delete " + movieTitle,
+                        resultMsg: ""
+                    });
+                }
+                res.render('admin', {
+                    errMsg: "",
+                    resultMsg: toTitleCase(movieTitle) + " is deleted successfully"
+                });
+            });
         }
     } else {
         return res.redirect('/');
     }
+});
+
+router.post('/review', function(req, res, next){
+    var theContract = new web3.eth.Contract(bc_conf.contract_abi, bc_conf.contract_addr);
+    theContract.methods.getProducerName(req.body.producer).call({}, function(errProd, resProd){
+        if(errProd) return res.redirect('/');
+        theContract.methods.getMovieGenre(req.body.producer, req.body.movieName).call({}, function(errGenre, resGenre){
+            if(errGenre) return res.redirect('/');
+            theContract.methods.getMovieCountry(req.body.producer, req.body.movieName).call({}, function(errCountry, resCountry){
+                if(errCountry) return res.redirect('/');
+                theContract.methods.getMovieCasts(req.body.producer, req.body.movieName).call({}, function(errCasts, resCasts){
+                    if(errCasts) return res.redirect('/');
+                    theContract.methods.getMoviePrice(req.body.producer, req.body.movieName).call({}, function(errPrice, resPrice){
+                        if(errPrice) return res.redirect('/');
+                        theContract.methods.getMovieDesc(req.body.producer, req.body.movieName).call({}, function(errDesc, resDesc){
+                            if(errDesc) return res.redirect('/');
+                            theContract.methods.getMovieReleaseDate(req.body.producer, req.body.movieName).call({}, function(errDate, resDate){
+                                if(errDate) return res.redirect('/');
+                                theContract.methods.getMovieRatingSum(req.body.producer, req.body.movieName).call({}, function(errRating, resRating){
+                                    if(errRating) return res.redirect('/');
+                                    theContract.methods.getMovieRaterSum(req.body.producer, req.body.movieName).call({}, function(errRater, resRater){
+                                        if(errRater) return res.redirect('/');
+                                        User.findOne({
+                                            _id: req.session.userId
+                                        }).exec(function(eU, rU){
+                                            if(eU || !rU){
+                                                res.render('review', {
+                                                    title: 'Movie Details',
+                                                    ethAddr: "",
+                                                    userName: "",
+                                                    movieTitle: req.body.movieName,
+                                                    movieTitleLower: req.body.movieName.toLowerCase(),
+                                                    movieAddr: req.body.producer.toLowerCase(),
+                                                    prodName: resProd,
+                                                    movieGenre: resGenre,
+                                                    movieCountry: resCountry,
+                                                    movieDesc: resDesc,
+                                                    moviePrice: resPrice,
+                                                    movieCasts: resCasts,
+                                                    movieDate: resDate,
+                                                    movieRate: resRater == 0 ? "Not Rated" : resRating / resRater
+                                                });
+                                            } else {
+                                                res.render('review', {
+                                                    title: 'Movie Details',
+                                                    ethAddr: rU.ethaddr,
+                                                    userName: rU.fullname,
+                                                    movieTitle: req.body.movieName,
+                                                    movieTitleLower: req.body.movieName.toLowerCase(),
+                                                    movieAddr: req.body.producer.toLowerCase(),
+                                                    prodName: resProd,
+                                                    movieGenre: resGenre,
+                                                    movieCountry: resCountry,
+                                                    movieDesc: resDesc,
+                                                    moviePrice: resPrice,
+                                                    movieCasts: resCasts,
+                                                    movieDate: resDate,
+                                                    movieRate: resRater == 0 ? "Not Rated" : resRating / resRater
+                                                });
+                                            }
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
 
 function toTitleCase(str) {

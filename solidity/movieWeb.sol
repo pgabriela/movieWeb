@@ -27,8 +27,15 @@ contract movieWeb {
         string country;
         string casts;
         uint moviePrice;
-        mapping (address => string) reviews;
+        mapping (address => review) reviews;
         address[] reviewer;
+
+        bool isValue;
+    }
+
+    struct review {
+        string comment;
+        uint rating;
 
         bool isValue;
     }
@@ -125,9 +132,23 @@ contract movieWeb {
         return getMovie(producer, movieName).reviewer.length;
     }
 
-    function getMovieReviewAtIndex(address producer, string movieName, uint index) public constant returns (string){
+    function getMovieReviewCommentAtIndex(address producer, string movieName, uint index) public constant returns (string){
         address currReviewer = getMovie(producer, movieName).reviewer[index];
-        return moviesProduced[producer][movieName].reviews[currReviewer];
+        return moviesProduced[producer][movieName].reviews[currReviewer].comment;
+    }
+
+    function getMovieReviewRatingAtIndex(address producer, string movieName, uint index) public constant returns (uint){
+        address currReviewer = getMovie(producer, movieName).reviewer[index];
+        return moviesProduced[producer][movieName].reviews[currReviewer].rating;
+    }
+
+    function getMovieReviewReviewerNameAtIndex(address producer, string movieName, uint index) public constant returns (string){
+        address currReviewer = getMovie(producer, movieName).reviewer[index];
+        return users[currReviewer];
+    }
+
+    function hasReviewed(address producer, address _user, string movieName) public constant returns (bool){
+        return moviesProduced[producer][movieName].reviews[_user].isValue;
     }
     // =========================================================================
     // =========================================================================
@@ -183,35 +204,35 @@ contract movieWeb {
         moviesProduced[producer][movieName].isValue = true;
     }
 
-    function rateMovie(address producer, string movieName, uint rate) public returns (bool){
-        if(rate > 10) return false;
+    function writeReview(
+        address producer,
+        string movieName,
+        string comment,
+        uint rate
+    ) public {
+        // Producers cannot make review
+        require(bytes(producers[msg.sender]).length == 0);
+
+        require(rate <= 10);
 
         // Check overflow
         require(moviesProduced[producer][movieName].raterSum + 1 > moviesProduced[producer][movieName].raterSum);
         require(moviesProduced[producer][movieName].ratingSum + rate >= moviesProduced[producer][movieName].ratingSum);
 
-        moviesProduced[producer][movieName].raterSum += 1;
-        moviesProduced[producer][movieName].ratingSum += rate;
-        return true;
-    }
-
-    function writeReview(
-        address producer,
-        string movieName,
-        string review
-    ) public {
-        // Producers cannot make review
-        require(bytes(producers[msg.sender]).length == 0);
         if(moviesWatched[msg.sender][producer][movieName] > 0){
-            if(bytes(moviesProduced[producer][movieName].reviews[msg.sender]).length == 0){
-                moviesProduced[producer][movieName].reviews[msg.sender] = review;
+            if(!moviesProduced[producer][movieName].reviews[msg.sender].isValue){
+                moviesProduced[producer][movieName].reviews[msg.sender].comment = comment;
+                moviesProduced[producer][movieName].reviews[msg.sender].rating = rate;
+                moviesProduced[producer][movieName].reviews[msg.sender].isValue = true;
+                moviesProduced[producer][movieName].raterSum += 1;
+                moviesProduced[producer][movieName].ratingSum += rate;
                 moviesProduced[producer][movieName].reviewer.push(msg.sender);
                 emit WriteReview(true, "Successfully write a review");
                 // Check review and send ether
                 // if(good review){
                 //     msg.sender.transfer(5);
                 // }
-                if(bytes(review).length >= 200){
+                if(bytes(comment).length >= 200){
                     if(tokenUsed.balanceOf(this) < 1){
                         tokenUsed.mintToken(this, 1);
                     }
@@ -271,7 +292,7 @@ contract movieWeb {
     // ======================== DELETION FUNCTION ==============================
     // =========================================================================
     function deleteReview(address producer, string movieName, address reviewer) public onlyOwner {
-        moviesProduced[producer][movieName].reviews[reviewer] = "";
+        delete moviesProduced[producer][movieName].reviews[reviewer];
     }
 
     // Expensive function
@@ -279,7 +300,7 @@ contract movieWeb {
         uint totalReviewer = moviesProduced[producer][movieName].reviewer.length;
         for(uint i=0; i<totalReviewer; i++){
             address currReviewer = moviesProduced[producer][movieName].reviewer[i];
-            moviesProduced[producer][movieName].reviews[currReviewer] = "";
+            delete moviesProduced[producer][movieName].reviews[currReviewer];
         }
         delete moviesProduced[producer][movieName];
         for(uint j=0; j<userKeys.length; j++){
