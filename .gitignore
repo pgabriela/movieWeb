@@ -1,4 +1,4 @@
 node_modules
-movie/*
+movie/*.mp4
 npm-debug.log
 public/images/0x*.jpg
