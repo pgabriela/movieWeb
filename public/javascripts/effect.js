@@ -91,7 +91,7 @@ $("#exampleModal").on("show.bs.modal", function(event) {
     } else {
         // CAN ONLY READ REVIEWS
         document.getElementById("modalBody").innerHTML = "<p>No web3js detected</p>";
-        document.getElementById("modalBody").innerHTML += "<p>You can only read this movie's reviews</p>";
+        document.getElementById("modalBody").innerHTML += "<p>You can only read this movie's details</p>";
         document.getElementById("modalBody").innerHTML += "<p>Do you want to continue</p>";
         document.getElementById("chosenMovieForm").action = "/review";
         document.getElementById("modalYes").onclick = function(e) {
@@ -213,7 +213,7 @@ window.addEventListener('load', function() {
         // Use Mist/MetaMask's provider
         web3js = new Web3(web3.currentProvider);
     } else {
-        alert('No web3js detected. You should install Metamask or else, you can only see movies available.');
+        alert('No web3js detected. You should install Metamask or else, you can only see movies available and their details.');
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     }
 

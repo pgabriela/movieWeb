@@ -7,7 +7,9 @@ window.addEventListener('load', function() {
         // Use Mist/MetaMask's provider
         web3js = new Web3(web3.currentProvider);
     } else {
-        alert('No web3js detected. You should install Metamask or else, you can only see movies available.');
+        alert('No web3js detected. You should install Metamask or else, you can only see movies available and their details.');
+        $("#reviewForm").addClass("invisible");
+	return;
         window.location.href = '/';
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     }
