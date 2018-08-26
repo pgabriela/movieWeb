@@ -1,4 +1,25 @@
 var web3js = 0;
+var socket = io();
+
+socket.on('oneReview', function(data){
+    var oneReviewRow = "";
+    oneReviewRow += '<div class="row" id="row2">';
+    oneReviewRow += '<div class="col-1"></div>';
+    oneReviewRow += '<div class="col-2">';
+    oneReviewRow += '<div id="grade_gray">';
+    oneReviewRow += '<p id="grade_yello" style="width: ' + data.rRR + '0%"></p>';
+    oneReviewRow += '</div>';
+    oneReviewRow += '<h6 style="float: left; color: white; margin-left: 7%">' + data.rRR + '/10</h6>';
+    oneReviewRow += '</div>';
+    oneReviewRow += '<div class="col-7">';
+    oneReviewRow += '<h6 style="color: white">' + data.rRCom + '</h6>';
+    oneReviewRow += '</div>';
+    oneReviewRow += '<div class="col-2">';
+    oneReviewRow += '<h6 style="color: white">By: ' + data.rRN + '</h6>';
+    oneReviewRow += '</div>';
+    oneReviewRow += '</div>';
+    document.getElementById("reviewsPlaceholder").innerHTML += oneReviewRow;
+});
 
 window.addEventListener('load', function() {
 
@@ -9,9 +30,8 @@ window.addEventListener('load', function() {
     } else {
         alert('No web3js detected. You should install Metamask or else, you can only see movies available and their details.');
         $("#reviewForm").addClass("invisible");
+        socket.emit('fetchReviews', { movieAddr: movieAddr, movieTitle: movieTitle });
 	return;
-        window.location.href = '/';
-        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     }
 
     // Now you can start your app & access web3 freely:
@@ -53,36 +73,5 @@ window.addEventListener('load', function() {
             }, 500);
         });
     };
-
-    theContract.getMovieReviewCount.call(movieAddr, movieTitle, function(eRC, rRC){
-        if(eRC) window.location.href = '/';
-        for(let c=0; c<rRC.toNumber(); c++){
-            theContract.getMovieReviewRatingAtIndex.call(movieAddr, movieTitle, c, function(eRR, rRR){
-                if(eRR) window.location.href = '/';
-                theContract.getMovieReviewCommentAtIndex.call(movieAddr, movieTitle, c, function(eRCom, rRCom){
-                    if(eRCom) window.location.href = '/';
-                    theContract.getMovieReviewReviewerNameAtIndex.call(movieAddr, movieTitle, c, function(eRN, rRN){
-                        if(eRN) window.location.href = '/';
-                        var oneReviewRow = "";
-                        oneReviewRow += '<div class="row" id="row2">';
-                        oneReviewRow += '<div class="col-1"></div>';
-                        oneReviewRow += '<div class="col-2">';
-                        oneReviewRow += '<div id="grade_gray">';
-                        oneReviewRow += '<p id="grade_yello" style="width: ' + rRR.toNumber() + '0%"></p>';
-                        oneReviewRow += '</div>';
-                        oneReviewRow += '<h6 style="float: left; color: white; margin-left: 7%">' + rRR.toNumber() + '/10</h6>';
-                        oneReviewRow += '</div>';
-                        oneReviewRow += '<div class="col-7">';
-                        oneReviewRow += '<h6 style="color: white">' + rRCom + '</h6>';
-                        oneReviewRow += '</div>';
-                        oneReviewRow += '<div class="col-2">';
-                        oneReviewRow += '<h6 style="color: white">By: ' + rRN + '</h6>';
-                        oneReviewRow += '</div>';
-                        oneReviewRow += '</div>';
-                        document.getElementById("reviewsPlaceholder").innerHTML += oneReviewRow;
-                    });
-                });
-            });
-        }
-    });
+    socket.emit('fetchReviews', { movieAddr: movieAddr, movieTitle: movieTitle });
 });

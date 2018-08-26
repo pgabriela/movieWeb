@@ -10,6 +10,9 @@ var http = require('http');
 var mongoose = require('mongoose');
 var movieDB = require('../models/movie');
 var MoviesSaved = require('../models/MovieSaved');
+var bc_conf = require('../server_side_blockchain_settings');
+var Web3 = require('web3');
+var web3 = new Web3(new Web3.providers.HttpProvider(bc_conf.node_url));
 
 mongoose.connect('mongodb://localhost/dbusers');
 var db = mongoose.connection;
@@ -43,6 +46,24 @@ io.on('connection', function(socket){
         MoviesSaved.find({ title: new RegExp(data, 'i') }, function(err, movies){
             socket.emit('movieList', movies);
         })
+    });
+    socket.on('fetchReviews', function(data){
+        var theContract = new web3.eth.Contract(bc_conf.contract_abi, bc_conf.contract_addr);
+        theContract.methods.getMovieReviewCount(data.movieAddr, data.movieTitle).call({}, function(eRC, rRC){
+            if(eRC) return;
+            for(let c=0; c<rRC; c++){
+                theContract.methods.getMovieReviewRatingAtIndex(data.movieAddr, data.movieTitle, c).call({}, function(eRR, rRR){
+                    if(eRR) return;
+                    theContract.methods.getMovieReviewCommentAtIndex(data.movieAddr, data.movieTitle, c).call({}, function(eRCom, rRCom){
+                        if(eRCom) return;
+                        theContract.methods.getMovieReviewReviewerNameAtIndex(data.movieAddr, data.movieTitle, c).call({}, function(eRN, rRN){
+                            if(eRN) return;
+                            socket.emit('oneReview', { rRR: rRR, rRCom: rRCom, rRN: rRN });
+                        });
+                    });
+                });
+            }
+        });
     });
 })
 
