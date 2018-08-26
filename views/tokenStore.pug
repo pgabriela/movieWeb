@@ -1,0 +1,41 @@
+html
+head
+    meta(charset="UTF-8")
+    title Token Buy
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+    link(href="stylesheets/movie_upload.css" rel="stylesheet")
+body
+    br
+    h1 Token Store
+
+    .main-container
+        .row
+            .col
+                .container
+                    .panel(class="panel-default")
+                        .panel-body
+                            .form-group
+                                label(for="Buy") Buy how much?
+                                input.form-control#TokenBuyValue(type="number" placeholder="100")
+                            button#TokenBuy.btn(class="btn-lg upload-btn token" type="button") Buy
+            .col
+                .container
+                    .panel(class="panel-default")
+                        .panel-body
+                            .form-group
+                                label(for="Buy") Sell how much?
+                                input.form-control#TokenSellValue(type="number" placeholder="100")
+                            button#TokenSell.btn(class="btn-lg upload-btn token" type="button") Sell
+        .row
+            h3.invisible#ErrorMsg(style="color: red")
+            h3 Buying Price: 1 ether =&nbsp
+                span#buyingPrice
+            h3 Selling Price: 1 ether =&nbsp
+                span#sellingPrice
+            h2 Currently, you have&nbsp
+                span#currentTokenAmount 0
+    script.
+        var ethAddr = "#{ethAddr}";
+    script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+    script(src="javascripts/client_side_blockchain_settings.js")
+    script(src="javascripts/tokenBuy.js")

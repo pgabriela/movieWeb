@@ -1,0 +1,58 @@
+html
+head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
+    title File Uploader
+    link(href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css')
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+    link(href="stylesheets/movie_upload.css" rel="stylesheet")
+
+body
+    br
+    h1 Upload Movie
+    .container
+        .row
+            .col-xs-12
+                h3#ErrorMsg.invisible(style="color: red; font-weight: bold") Please fill the movie details first
+                .panel(class="panel-default")
+                    .panel-body
+                        h5#FileNamePlaceholder.invisible
+                        .progress
+                            .progress-bar(role="progressbar")
+                        button#uploadBtn.btn(class="btn-lg upload-btn" type="button") Upload File
+    .container
+        form#uploadForm(action="/upload" method='post')
+            .row
+                label(for="MovieTitle") Title
+                input.form-control#MovieTitle(type="text" name="MovieTitle" placeholder="Moon young")
+                label(for="MovieGenre") Genre
+                input.form-control#MovieGenre(type="text" name="MovieGenre" placeholder="Thriller")
+                label(for="MovieReleaseDate") Release Date
+                input.form-control#MovieReleaseDate(type="text" name="MovieReleaseDate" placeholder="12 January 2013")
+                label(for="MovieCast") Cast
+                input.form-control#MovieCast(type="text" name="MovieCast" placeholder="John Doe, David Style")
+                label(for="MovieCountry") Country
+                input.form-control#MovieCountry(type="text" name="MovieCountry" placeholder="South Korea")
+                label(for="MoviePrice") Price of Movie in Token
+                input.form-control#MoviePrice(type="text" name="MoviePrice" placeholder="30 Token")
+                label(for="MovieDescription") Basic Description
+                input.form-control#MovieDescription(type="text" name="MovieDescription" placeholder="John Doe was born in 1967 in ...")
+                script.
+                    var ethAddr = "#{ethAddr}";
+            .row(style="margin-bottom: 10px")
+                .col
+                    p Movie Picture (Portrait)
+                    input.form-control#uploadPic(type="file" name="uploadPic" accept=".jpg")
+                .col
+                    p Movie Banner (Landscape)
+                    input.form-control#uploadBanner(type="file" name="uploadBanner" accept=".jpg")
+            button#submitBtn.btn(class="btn-lg upload-btn" type="submit") Submit
+
+    input#upload-input(type="file" name="uploadMov")
+    br
+
+    script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
+    script(src="javascripts/upload.js")

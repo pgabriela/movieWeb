@@ -7,6 +7,16 @@
 var app = require('../app');
 var debug = require('debug')('movieweb:server');
 var http = require('http');
+var mongoose = require('mongoose');
+var movieDB = require('../models/movie');
+var MoviesSaved = require('../models/MovieSaved');
+
+mongoose.connect('mongodb://localhost/dbusers');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function(){
+  console.log('Connected to MongoDB');
+});
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +30,20 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+var io = require('socket.io')(server);
+io.on('connection', function(socket){
+    console.log("a user connected");
+    socket.on('queryMovies', function(data){
+        movieDB.find({}, function(err, movies){
+            socket.emit('movieList', movies);
+        })
+    });
+    socket.on('searchMoviesToBeDeleted', function(data){
+        MoviesSaved.find({ title: new RegExp(data, 'i') }, function(err, movies){
+            socket.emit('movieList', movies);
+        })
+    });
+})
 
 /**
  * Listen on provided port, on all network interfaces.

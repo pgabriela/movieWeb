@@ -1,0 +1,26 @@
+extends layout.pug
+
+block extraCSS
+    link(rel='stylesheet', href='stylesheets/admin.css')
+block content
+    .container-fluid
+        h4(style="color: red")= errMsg
+        h4(style="color: green")= resultMsg
+        form#masterForm(action='/admin' method='post')
+            .row
+                .col
+                    select#optionSelector.form-control(name='option')
+                        option(value="addProducer" selected="selected") Add Producer
+                        option(value="addMovie") Add Movie
+                        option(value="deleteMovie") Delete Movie
+            .row
+                .col
+                    #formInputs
+                        input.form-control(name="prodAddr" type="text" placeholder="Producer Address")
+            .row
+                .col
+                    button#submitBtn.btn(class="btn-outline-warning" type="submit") Submit
+
+    script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.slim.js')
+    script(src='javascripts/admin.js')

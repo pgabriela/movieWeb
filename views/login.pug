@@ -1,39 +1,41 @@
 extend layout
 
 block extraCSS
-  link(rel='stylesheet', href='/stylesheets/login.css')
+    link(rel='stylesheet', href='/stylesheets/login.css')
 
 block content
-  h1 Windows movie maker
-  .form-w3ls
-    .form-head-w3l
-    ul.tab-group.cl-effect-4
-      li.tab.active
-        a(href='#signin-agile') Sign In
-      li.tab
-        a(href='#signup-agile') Sign Up
-    .tab-content
-      #signin-agile
-        form(action='login' method='post')
-          p.header User Name
-          input#fullnameLG(type='text' name='fullnameLG' placeholder='User Name' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" required='required')
-          p.header Password
-          input#passwordLG(type='password' name='passwordLG' placeholder='Password' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required='required')
-          input#brand(type='checkbox' value='')
-          label(for='brand')
-            span
-            |  Remember me?
-          input.sign-in(type='submit' value='Sign In')
-      #signup-agile
-        form(action='register' method='post')
-          p.header User Name
-          input#fullname(type='text' name='fullname' placeholder='Your Full Name' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Your Full Name';}" required='required')
-          p.header Email Address
-          input#email(type='email' name='email' placeholder='Email' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required='required')
-          p.header Password
-          input#password(type='password' name='password' placeholder='Password' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required='required')
-          p.header Confirm Password
-          input#cpassword(type='password' name='cpassword' placeholder='Confirm Password' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Confirm Password';}" required='required')
-          input.register(type='submit' value='Sign up')
-  script(src="javascripts/jquery.min.js")
-  script(src="javascripts/login.js")
+    h1 MOVIECHAIN
+    .form-w3ls
+        .form-head-w3l
+        ul.tab-group.cl-effect-4
+            li.tab.active
+                a(href='#signin-agile') Sign In
+            li.tab
+                a(href='#signup-agile') Sign Up
+        .tab-content
+            #signin-agile
+                form(action='login' method='post')
+                    p.header User Name
+                    input#fullnameLG(type='text' name='fullnameLG' placeholder='User Name' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" required='required')
+                    p.header Password
+                    input#passwordLG(type='password' name='passwordLG' placeholder='Password' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required='required')
+                    input#brand(type='checkbox' value='')
+                    label(for='brand')
+                        span
+                        |  Remember me?
+                    input.sign-in(type='submit' value='Sign In')
+            #signup-agile
+                form#registerForm(action='register' method='post')
+                    p.header User Name
+                    input#fullname(type='text' name='fullname' placeholder='Your Full Name' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Your Full Name';}" required='required')
+                    p.header Email Address
+                    input#email(type='email' name='email' placeholder='Email' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required='required')
+                    p.header Password
+                    input#password(type='password' name='password' placeholder='Password' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required='required')
+                    p.header Confirm Password
+                    input#cpassword(type='password' name='cpassword' placeholder='Confirm Password' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Confirm Password';}" required='required')
+                    p.header Ethereum Address
+                    input#ethAddr(type="text" name="ethAddr" value="" disabled)
+                    input.register(type='submit' value='Sign up')
+    script(src="javascripts/jquery.min.js")
+    script(src="javascripts/login.js")

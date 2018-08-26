@@ -10,53 +10,71 @@ var validateEmail = function(email) {
 
 var userSchema = new Schema({
 
-  fullname: { type: String,  required: [true, 'Full name must be provided'] },
-
-  email:    { 
-    
-    type: String,     
-
-    Required:  'Email address cannot be left blank.',
-    validate: [validateEmail, 'Please fill a valid email address'],
-         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
-    index: {unique: true, dropDups: true}
+    fullname: {
+        type: String,
+        required: [true, 'Full name must be provided']
     },
 
-  password: { type: String , required: [true,  'Password cannot be left blank']},
+    email: {
+        type: String,
+        Required: 'Email address cannot be left blank.',
+        validate: [validateEmail, 'Please fill a valid email address'],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
+        //index: {unique: true, dropDups: true}
+    },
 
+    password: {
+        type: String,
+        required: [true, 'Password cannot be left blank']
+    },
+
+    ethaddr: {
+        type: String,
+        required: [true, 'Ethereum Address must be provided']
+    },
+    //index: {unique: true, dropDups: true}
+});
+userSchema.index({
+    ethaddr: 1
+});
+userSchema.index({
+    email: 1
 });
 
 //authenticate input against database
-userSchema.statics.authenticate = function (fullname, password, callback) {
-  User.findOne({ fullname: fullname })
-    .exec(function (err, user) {
-      if (err) {
-        return callback(err)
-      } else if (!user) {
-        var err = new Error('User not found.');
-        err.status = 401;
-        return callback(err);
-      }
-      bcrypt.compare(password, user.password, function (err, result) {
-        if (result === true) {
-          return callback(null, user);
-        } else {
-          return callback();
-        }
-      })
-    });
+userSchema.statics.authenticate = function(fullname, password, callback) {
+    User.findOne({
+            fullname: fullname
+        })
+        .exec(function(err, user) {
+            if (err) {
+                return callback(err)
+            } else if (!user) {
+                var err = new Error('User not found.');
+                err.status = 401;
+                return callback(err);
+            }
+            bcrypt.compare(password, user.password, function(err, result) {
+                if (result === true) {
+                    return callback(null, user);
+                } else {
+                    return callback();
+                }
+            })
+        });
 }
 
 //hashing a password before saving it to the database
-userSchema.pre('save', function (next) {
-  var user = this;
-  bcrypt.hash(user.password, 10, function (err, hash){
-    if (err) {
-      return next(err);
-    }
-    user.password = hash;
-    next();
-  })
+userSchema.pre('save', function(next) {
+    var user = this;
+    bcrypt.hash(user.password, 10, function(err, hash) {
+        if (err) {
+            return next(err);
+        }
+        user.password = hash;
+        user.ethaddr = user.ethaddr.toLowerCase();
+        next();
+    })
 });
 
 var User = mongoose.model('Users', userSchema);
