@@ -552,9 +552,20 @@ router.post('/admin', function(req, res, next){
                         resultMsg: ""
                     });
                 }
-                res.render('admin', {
-                    errMsg: "",
-                    resultMsg: toTitleCase(movieTitle) + " is deleted successfully"
+                var thePath = path.join(__dirname, '/../movie');
+                var imgPath = path.join(__dirname, '/../public/images');
+                fs.unlink(path.join(thePath, movieAddr + '-' + movieTitle.toLowerCase() + '.mp4'), (errWhenRemoving) => {
+                    if (errWhenRemoving) throw errWhenRemoving;
+                    fs.unlink(path.join(imgPath, movieAddr + '-' + movieTitle.toLowerCase() + '.jpg'), (errWhenRemovingImg1) => {
+                        if (errWhenRemovingImg1) throw errWhenRemovingImg1;
+                        fs.unlink(path.join(imgPath, movieAddr + '-' + movieTitle.toLowerCase() + '-banner.jpg'), (errWhenRemovingImg2) => {
+                            if (errWhenRemovingImg2) throw errWhenRemovingImg2;
+                            res.render('admin', {
+                                errMsg: "",
+                                resultMsg: toTitleCase(movieTitle) + " is deleted successfully"
+			    });
+			});
+                    });
                 });
             });
         }
