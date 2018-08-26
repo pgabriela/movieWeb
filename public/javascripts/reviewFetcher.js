@@ -36,32 +36,13 @@ window.addEventListener('load', function() {
             'from': ethAddr,
             'gas': 4700000
         }, function(eWR, rWR){
-            theContract.getMovieRatingSum.call(movieAddr, movieTitle, function(eRS, rRS){
-                if(eRS) window.location.href = '/';
-                theContract.getMovieRaterSum.call(movieAddr, movieTitle, function(eRrS, rRrS){
-                    if(eRrS) window.location.href = '/';
-                    $("#movieRatingPlace").html(rRS / rRrS);
-                });
-            });
-            $("#reviewForm").html("<h5 class='text-center' style='color: white'>*You can only make one review for the same movie*</h5>");
-            if(eWR) window.location.href = '/';
             var oneReviewRow = "";
-            oneReviewRow += '<div class="row" id="row2">';
-            oneReviewRow += '<div class="col-1"></div>';
-            oneReviewRow += '<div class="col-2">';
-            oneReviewRow += '<div id="grade_gray">';
-            oneReviewRow += '<p id="grade_yello" style="width: ' + rating + '0%"></p>';
-            oneReviewRow += '</div>';
-            oneReviewRow += '<h6 style="float: left; color: white; margin-left: 7%">' + rating + '/10</h6>';
-            oneReviewRow += '</div>';
-            oneReviewRow += '<div class="col-7">';
-            oneReviewRow += '<h6 style="float: left; color: white">' + comment + '</h6>';
-            oneReviewRow += '</div>';
-            oneReviewRow += '<div class="col-2">';
-            oneReviewRow += '<h6 style="float: left; color: white">By: ' + userName + '</h6>';
-            oneReviewRow += '</div>';
-            oneReviewRow += '</div>';
+            oneReviewRow += "<form action='/review' method='post' id='refresher'>";
+            oneReviewRow += "<input class='invisible' name='producer' value='" + movieAddr + "'/>";
+            oneReviewRow += "<input class='invisible' name='movieName' value='" + movieTitle + "'/>";
+            oneReviewRow += "</form>";
             document.getElementById("reviewsPlaceholder").innerHTML += oneReviewRow;
+            $("#refresher").submit();
         });
     };
 
