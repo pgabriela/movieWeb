@@ -36,13 +36,19 @@ window.addEventListener('load', function() {
             'from': ethAddr,
             'gas': 4700000
         }, function(eWR, rWR){
-            var oneReviewRow = "";
-            oneReviewRow += "<form action='/review' method='post' id='refresher'>";
-            oneReviewRow += "<input class='invisible' name='producer' value='" + movieAddr + "'/>";
-            oneReviewRow += "<input class='invisible' name='movieName' value='" + movieTitle + "'/>";
-            oneReviewRow += "</form>";
-            document.getElementById("reviewsPlaceholder").innerHTML += oneReviewRow;
-            $("#refresher").submit();
+            setInterval(function(){
+                theContract.hasReviewed.call(movieAddr, ethAddr, movieTitle, function(eHR, rHR){
+                    if(rHR){
+                        var oneReviewRow = "";
+                        oneReviewRow += "<form action='/review' method='post' id='refresher'>";
+                        oneReviewRow += "<input class='invisible' name='producer' value='" + movieAddr + "'/>";
+                        oneReviewRow += "<input class='invisible' name='movieName' value='" + movieTitle + "'/>";
+                        oneReviewRow += "</form>";
+                        document.getElementById("reviewsPlaceholder").innerHTML += oneReviewRow;
+                        $("#refresher").submit();
+                    }
+                });
+            }, 500);
         });
     };
 

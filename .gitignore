@@ -1,1 +1,4 @@
 node_modules
+movie/*
+npm-debug.log
+public/images/0x*.jpg

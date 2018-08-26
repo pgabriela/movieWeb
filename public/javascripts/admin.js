@@ -88,9 +88,9 @@ document.getElementById("optionSelector").onchange = function() {
                 counter++;
             }
             formInputs.innerHTML = tempHTML;
-            for (var x = 0; x < counter; x++) {
-                var z = document.getElementById("addMovieBtn" + x);
-                var selector = x;
+            for (let x = 0; x < counter; x++) {
+                let z = document.getElementById("addMovieBtn" + x);
+                let selector = x;
                 z.onclick = function(e) {
                     document.getElementById("movieAddr").value = movieListContainer[selector].prodAddr;
                     document.getElementById("movieTitle").value = movieListContainer[selector].title;
@@ -185,9 +185,9 @@ document.getElementById("optionSelector").onchange = function() {
                 counter++;
             }
             document.getElementById("formInputs2").innerHTML += tempHTML;
-            for (var x = 0; x < counter; x++) {
-                var z = document.getElementById("deleteMovieBtn" + x);
-                var selector = x;
+            for (let x = 0; x < counter; x++) {
+                let z = document.getElementById("deleteMovieBtn" + x);
+                let selector = x;
                 z.onclick = function(e) {
                     document.getElementById("movieAddr").value = movieListContainer[selector].prodAddr;
                     document.getElementById("movieTitle").value = movieListContainer[selector].title;

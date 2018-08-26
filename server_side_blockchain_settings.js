@@ -1,6 +1,6 @@
-var node_url = "http://localhost:8545";
-var token_addr = "0xb13b5e34092e21a53cb1110a3050bd0e117dc15d";
-var contract_addr = "0x79a8FC3D98Fc84c9BC2B3a737EA992321a1b86A3";
+var node_url = "http://0.0.0.0:8545";
+var token_addr = "0x492934308E98b590A626666B703A6dDf2120e85e";
+var contract_addr = "0x0A64DF94bc0E039474DB42bb52FEca0c1d540402";
 var token_abi = [{
     "constant": true,
     "inputs": [],
