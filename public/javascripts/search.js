@@ -1,6 +1,12 @@
 var web3js = 0;
 var account = 0;
 
+$("#searchForm").submit(function(e){
+    if($("#searchBar").val() == ""){
+        e.preventDefault();
+    }
+});
+
 for (let i = 0; i < parseInt(totalFound); i++) {
     let selector1 = "movieImg1" + i;
     let selector2 = "movieText1" + i;

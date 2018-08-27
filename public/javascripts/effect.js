@@ -2,6 +2,12 @@ var web3js = 0;
 var account = 0;
 var picRatio = 16/7;
 
+$("#searchForm").submit(function(e){
+    if($("#searchBar").val() == ""){
+        e.preventDefault();
+    }
+});
+
 for (var counter = 0; counter < 2; counter++) {
     for (var i = 0; i < 6; i++) {
         let selector1 = "movieImg" + counter + "" + i;
