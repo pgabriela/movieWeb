@@ -10,11 +10,11 @@ block content
             span.fas(class="fa-bars")
 
         .collapse(class="navbar-collapse", id="navbarSupportedContent")
-            form(class="form-inline my-2 my-lg-0 d-flex justify-content-end")
+            form#searchForm(class="form-inline my-2 my-lg-0 d-flex justify-content-end" action='/search' method='post')
                 .input-group
-                    input.form-control(placeholder="Search", id="searchBar")
+                    input.form-control#searchBar(placeholder="Search", name="searchInput")
                     .input-group-append
-                        button.btn(class="btn-outline-warning", href="#")
+                        button.btn(class="btn-outline-warning", type="submit")
                             i.fa(class="fa-search")
             if loggedIn == 'false'
                 button#login(class="btn btn-outline-warning float-right", onclick="loginBtn()") Login

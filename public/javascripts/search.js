@@ -1,41 +1,34 @@
 var web3js = 0;
 var account = 0;
-var picRatio = 16/7;
 
-for (var counter = 0; counter < 2; counter++) {
-    for (var i = 0; i < 6; i++) {
-        let selector1 = "movieImg" + counter + "" + i;
-        let selector2 = "movieText" + counter + "" + i;
-        let selector3 = "playIcon" + counter + "" + i;
-        document.getElementById("movieCard" + counter + "" + i).addEventListener("mouseover", function cardHover() {
-            document.getElementById(selector1).style.opacity = "0.3";
-            document.getElementById(selector2).style.opacity = "0.3";
-            document.getElementById(selector3).classList.remove("invisible");
-        });
-    }
+for (let i = 0; i < parseInt(totalFound); i++) {
+    let selector1 = "movieImg1" + i;
+    let selector2 = "movieText1" + i;
+    let selector3 = "playIcon1" + i;
+    document.getElementById("movieCard1" + i).addEventListener("mouseover", function cardHover() {
+        document.getElementById(selector1).style.opacity = "0.3";
+        document.getElementById(selector2).style.opacity = "0.3";
+        document.getElementById(selector3).classList.remove("invisible");
+    });
 }
 
-for (var counter = 0; counter < 2; counter++) {
-    for (var i = 0; i < 6; i++) {
-        let selector1 = "movieImg" + counter + "" + i;
-        let selector2 = "movieText" + counter + "" + i;
-        let selector3 = "playIcon" + counter + "" + i;
-        document.getElementById("movieCard" + counter + "" + i).addEventListener("mouseout", function cardHover() {
-            document.getElementById(selector1).style.opacity = "1";
-            document.getElementById(selector2).style.opacity = "1";
-            document.getElementById(selector3).classList.add("invisible");
-        });
-    }
+for (let i = 0; i < parseInt(totalFound); i++) {
+    let selector1 = "movieImg1" + i;
+    let selector2 = "movieText1" + i;
+    let selector3 = "playIcon1" + i;
+    document.getElementById("movieCard1" + i).addEventListener("mouseout", function cardHover() {
+        document.getElementById(selector1).style.opacity = "1";
+        document.getElementById(selector2).style.opacity = "1";
+        document.getElementById(selector3).classList.add("invisible");
+    });
 }
 
-for (let counter = 0; counter < 2; counter++) {
-    for (let i = 0; i < 6; i++) {
-        document.getElementById("movieCard" + counter + "" + i).onclick = function() {
-            document.getElementById("chosenMovieProd").value = document.getElementById("movieProdValue" + counter + "" + i).value;
-            document.getElementById("chosenMovieName").value = document.getElementById("movieTitleValue" + counter + "" + i).value;
-            document.getElementById("exampleModalLabel2").innerHTML = document.getElementById("movieTitleValue" + counter + "" + i).value;
-        };
-    }
+for (let i = 0; i < parseInt(totalFound); i++) {
+    document.getElementById("movieCard1" + i).onclick = function() {
+        document.getElementById("chosenMovieProd").value = document.getElementById("movieProdValue1" + i).value;
+        document.getElementById("chosenMovieName").value = document.getElementById("movieTitleValue1" + i).value;
+        document.getElementById("exampleModalLabel2").innerHTML = document.getElementById("movieTitleValue1" + i).value;
+    };
 }
 
 $("#exampleModal").on("show.bs.modal", function(event) {
@@ -216,30 +209,4 @@ window.addEventListener('load', function() {
     account = ethAddr;
     console.log(account);
 
-    var bw1 = $("#banner1").width();
-    $("#banner1").height(bw1 / picRatio);
-    $("#banner2").height(bw1 / picRatio);
-    $("#banner3").height(bw1 / picRatio);
 });
-
-window.onresize = function(){
-    let bw1 = $("#banner1").width();
-    let bw2 = $("#banner2").width();
-    let bw3 = $("#banner3").width();
-    if(bw1 != 0){
-        let j = bw1 / picRatio;
-        $("#banner1").height(j);
-        $("#banner2").height(j);
-        $("#banner3").height(j);
-    } else if(bw2 != 0){
-        let j = bw2 / picRatio;
-        $("#banner1").height(j);
-        $("#banner2").height(j);
-        $("#banner3").height(j);
-    } else {
-        let j = bw3 / picRatio;
-        $("#banner1").height(j);
-        $("#banner2").height(j);
-        $("#banner3").height(j);
-    }
-};

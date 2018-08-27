@@ -30,13 +30,17 @@ window.addEventListener('load', function() {
     } else {
         alert('No web3js detected. You should install Metamask or else, you can only see movies available and their details.');
         $("#reviewForm").addClass("invisible");
+        $("#movieWatch").addClass("invisible");
         socket.emit('fetchReviews', { movieAddr: movieAddr, movieTitle: movieTitle });
 	return;
     }
 
     // Now you can start your app & access web3 freely:
     var theContract = web3js.eth.contract(contract_abi).at(contract_addr);
-    if(ethAddr == "") $("#reviewForm").addClass("invisible");
+    if(ethAddr == ""){
+        $("#reviewForm").addClass("invisible");
+        $("#movieWatch").addClass("invisible");
+    }
     theContract.hasPaid(movieAddr, ethAddr, movieTitle, function(eHP, rHP){
         if(rHP.toNumber() <= 0){
             $("#reviewForm").html("<h5 class='text-center' style='color: white'>*You can only make a review if you have watched this movie*</h5>");
@@ -74,4 +78,35 @@ window.addEventListener('load', function() {
         });
     };
     socket.emit('fetchReviews', { movieAddr: movieAddr, movieTitle: movieTitle });
+});
+
+
+$("#exampleModal").on("show.bs.modal", function(event) {
+    // HAVENT CHECK MAIN NET
+    var theToken = web3js.eth.contract(token_abi).at(token_addr);
+    var theContract = web3js.eth.contract(contract_abi).at(contract_addr);
+    theToken.balanceOf(ethAddr, function(error, result) {
+        var currToken = result;
+        var producer = document.getElementById("chosenMovieProd").value;
+        var movieName = document.getElementById("chosenMovieName").value;
+        theContract.hasPaid(producer, ethAddr, movieName, function(e, hasP) {
+            if (hasP.toNumber() > 0) {
+                document.getElementById("chosenMovieForm").submit();
+            } else {
+                if (currToken < moviePrice) {
+            	    document.getElementById("modalBody").innerHTML = "<p>You don't have enough token</p>";
+            	    document.getElementById("modalBody").innerHTML += "<p>You are going to be redirected to Token Store</p>";
+            	    document.getElementById("modalBody").innerHTML += "<p>Do you want to continue</p>";
+            	    document.getElementById("modalYes").href = '/tokenstore';
+                } else {
+            	    document.getElementById("modalBody").innerHTML = "<p>Your current balance: " + currToken + " Token</p>";
+            	    document.getElementById("modalBody").innerHTML += "<p>This movie costs " + moviePrice + " Token</p>";
+            	    document.getElementById("modalBody").innerHTML += "<p>Do you want to continue</p>";
+            	    document.getElementById("modalYes").onclick = function(e) {
+            	        document.getElementById("chosenMovieForm").submit();
+            	    };
+                }
+            }
+        });
+    });
 });

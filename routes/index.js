@@ -284,6 +284,70 @@ router.get('/', function(req, res, next) {
     });
 });
 
+router.post('/search', function(req, res, next){
+    var query = req.body.searchInput;
+    MoviesSaved.find({ title: new RegExp(query, 'i') }, function(err, movies){
+        if(req.session && req.session.adminId){
+            res.render('search', {
+                title: 'Search Results',
+                loggedIn: 'true',
+                fullname: "admin",
+                ethAddr: "",
+                isProd: 'false',
+                isAdmin: 'true',
+                searchResults: movies
+            });
+        } else if(req.session && req.session.userId){ 
+            User.findOne({
+                _id: req.session.userId
+            }).exec(function(err, userLogged) {
+	        if (!err) {
+	            Prod.findOne({
+	                ethaddr: userLogged.ethaddr.toLowerCase()
+	            }, function(err2, prodLogged){
+	                if(!err2){
+	            	    if(prodLogged){
+	            	        req.session.prodId = prodLogged._id;
+	            	        res.render('search', {
+	            	    	    title: 'Search Results',
+	            	    	    loggedIn: 'true',
+	            	    	    fullname: userLogged.fullname,
+	            	    	    ethAddr: userLogged.ethaddr.toLowerCase(),
+	            	    	    isProd: 'true',
+	            	    	    isAdmin: 'false',
+                                    searchResults: movies
+	            	        });
+	            	} else {
+	            	    res.render('search', {
+	            		title: 'Search Results',
+	            		loggedIn: 'true',
+	            		fullname: userLogged.fullname,
+	            		ethAddr: userLogged.ethaddr.toLowerCase(),
+	            		isProd: 'false',
+	            		isAdmin: 'false',
+                                searchResults: movies
+	            	    });
+	            	}
+	                }
+	            });
+	        } else {
+                    return res.redirect('/');
+                }
+            });
+        } else {
+	    res.render('search', {
+	        title: 'Search Results',
+	        loggedIn: 'false',
+	        fullname: "",
+	        ethAddr: "",
+	        isProd: 'false',
+	        isAdmin: 'false',
+                searchResults: movies
+	    });
+        }
+    });
+});
+
 router.get('/login', function(req, res, next) {
     if (req.session && (req.session.userId || req.session.adminId)) {
         return res.redirect('/');

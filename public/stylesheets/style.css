@@ -78,6 +78,10 @@ body {
     color: #ffc107;
 }
 
+#smallMovies>h5 {
+    color: white;
+}
+
 .card {
     background-color: black;
     border-color: rgba(255, 255, 255, 0.1);

@@ -2,6 +2,11 @@ body{
     background-color : black;
 }
 
+#movieWatch {
+    margin-top: 5%;
+    font-size: 200%;
+}
+
 #row1 {
     margin-top: 5%
 }

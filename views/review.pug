@@ -4,6 +4,23 @@ block extraCSS
     link(href="stylesheets/styple.css" rel="stylesheet")
 
 block content
+    .modal#exampleModal(class="fade", tabindex="-1", role="dialog", aria-labelledby="exampleModalLabel", aria-hidden="true")
+        .modal-dialog(role="document")
+            .modal-content
+                .modal-header
+                    h5.modal-title#exampleModalLabel Watch This Movie?
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                .modal-body#modalBody
+                    p Your current balance: __ MOVIECHAIN TOKEN
+                    p This movie costs __ MOVIECHAIN TOKEN
+                    p Do you want to continue?
+                .modal-footer
+                    a.btn(href="#", class="btn-secondary", data-dismiss="modal") No
+                    a.btn#modalYes(href="#", class="btn-primary") Yes
+    form#chosenMovieForm(action='/payment', method='post')
+        input#chosenMovieProd(style="display: none", value="0x0033D2EE0772B9824d8C7A8E67024f1a2286341A", name="producer")
+        input#chosenMovieName(style="display: none", value="Moonyoung", name="movieName")
     .container-fluid
         .row#row1
             .col-1
@@ -11,6 +28,12 @@ block content
                 .card(class="w-70 bg-dark text-white", style="border-color: white")
                     a(href="images/" + movieAddr + "-" + movieTitleLower + ".jpg", title="Click to watch original poster" target='_blank')
                         img.card-img(src="images/" + movieAddr + "-" + movieTitleLower + ".jpg")
+                a.btn#movieWatch(class="btn-danger btn-block" data-toggle="modal" data-target="#exampleModal") #[b Watch Now]
+                script.
+                    document.getElementById("movieWatch").onclick = function(){
+                        document.getElementById("chosenMovieProd").value = movieAddr;
+                        document.getElementById("chosenMovieName").value = movieTitle;
+                    };
             .col-7
                 .row
                     h1#font1= movieTitle
@@ -48,6 +71,7 @@ block content
                     var userName = "#{userName}";
                     var movieTitle = "#{movieTitle}";
                     var movieAddr = "#{movieAddr}";
+                    var moviePrice = "#{moviePrice}";
                 .col-1
                 .col-1
                     span.star-input
